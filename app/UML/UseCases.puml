@@ -1,0 +1,122 @@
+@startsalt
+{
+{T
++ Start Game
+++  Goal
++++ To press the correct sequence of colors
+++ Entry conditions
++++ The player has activated the game
+++ Scenario
++++ Simon flashes a sequence of colored lights
++++ When the player hits the correct light,
+++++ the score is increased by one,
+++++ and the sequence of random colors are increased by one
++++ The game ends when the player,
+++++ hits the wrong light,
+++++ or quits the game
+++ Exceptions
++++ The game crashes before it concludes
+++ Exit conditions
++++ Successful Exit Conditions
+++++ The game is completed
+++++ The score is available
++++ Failure Exit Conditions
+++++ No score is available
+}
+---
+{T
++ Press Button
+++  Goal
++++ To progress through the game
+++ Entry conditions
++++ Simon has previously activated a sequence of lights
+++ Scenario
++++ If the button press is correct,
+++++ the system waits for the next button,
+++++ or if that was the last button for the sequence it will flash the next set of lights
++++ If the button press is not correct,
+++++ the game is over
+++ Exceptions
++++ None
+++ Exit conditions
++++ Successful Exit Conditions
+++++ The system logs the correct button press.
++++ Failure Exit Conditions
+++++ The system logs an incorrect button press.
+}
+---
+{T
++ Flash Sequence
+++ Goal
++++ For Simon to flash a sequence of lights
+++ Entry conditions
++++ The game has been started
+++ Scenario
++++ The board flashes a random sequence of lights,
++++ the number of flashes is set by an integer which
++++ which is comprised of the players score (which initializes at 0) increased by one,
+++ Exceptions
++++ None
+++ Exit Conditions
++++ Successful Exit Conditions
+++++ A correct number of lights flash
++++ Incorrect Exit Conditions
+++++ None
+}
+---
+{T
++ View Simon Board
+++  Goal
++++ To depict the board, buttons, and the score
+++ Entry conditions
++++ The game is running.
+++ Scenario
++++ The Player is shown the board, consisting of
+++++ buttons
+++++ score
+++ Exceptions
++++ None
+++ Exit conditions
++++ Successful Exit Conditions
+++++ The game has concluded
++++ Failure Exit Conditions
+++++ None
+}
+---
+{T
++ View Score
+++  Goal
++++ to indicate how many correct sequences of lights have been pressed
+++ Entry conditions
++++ Player hits the first sequence correctly
+++ Scenario
++++ The number of sequences correctly matched by the player is shown.
++++ Initially, the score is zero.
+++ Exceptions
++++ None
+++ Exit conditions
++++ Successful Exit Conditions
+++++ The score is updated to reflect the number sequences passed.
++++ Failure Exit Conditions
+++++ None
+}
+---
+{T
++ Publish Score
+++  Goal
++++ To send the Player's score to a central repository of scores.
+++ Entry conditions
++++ Game Over
+++ Scenario
++++ The score is sent to the Leader Boards.
+++ Exceptions
++++ Communication with the Leader Boards are not possible.
+++ Exit conditions
++++ Successful Exit Conditions
+++++ The score is successfully sent to Leader Boards.
++++ Failure Exit Conditions
+++++ No score is published
+}
+
+}
+@endsalt

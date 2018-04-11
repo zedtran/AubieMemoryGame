@@ -1,0 +1,23 @@
+@startuml
+title Use Case Diagram
+
+actor Player
+actor Simon
+actor Memory
+
+rectangle  {
+usecase "publish score" as UC3
+usecase "start game" as UC2
+usecase "view score" as UC1
+usecase "flash sequence" as UC4
+Player -- UC2
+Player -- UC1
+Simon -- UC4
+
+UC2 ..> (press button): <<includes>>
+UC2 ..> (show Simon board): <<includes>>
+Memory -- UC3
+
+}
+@enduml
+

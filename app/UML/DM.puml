@@ -1,0 +1,34 @@
+@startuml
+
+title Simon Domain Model
+class Player {
+highScore
+}
+class LeaderBoards {
+}
+
+class Button {
+color
+isLit
+}
+class Controller {
+    greenLit
+    blueLit
+    yellowLit
+    redLit
+    score
+    difficulty
+}
+class Board {
+}
+
+Board "1" *-- "4" Button : contains >
+Board "1" *-- "1" Controller : contains >
+Player "1" -- "1" Controller: listensTo >
+Player "1" -- "4" Button: presses >
+Player "*" -- "1" LeaderBoards: uploades score >
+Controller "1" -- "4" Button: signals which button to light up >
+
+hide empty members
+hide methods
+@enduml

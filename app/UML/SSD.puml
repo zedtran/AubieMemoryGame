@@ -1,0 +1,30 @@
+@startuml
+title Simon SSD
+actor Player
+participant Simon
+actor Memory
+
+group SD: Simon
+
+    Player -> Simon: start
+    loop while !(gameOver)
+        Player <-- Simon:Board
+        note right: UC: show Simon Board
+        Player <-- Simon:Controller
+        Player <-- Simon:Button
+        note right: Note: index is set to score plus one
+        loop while(index > 0)
+            Player <-- Simon:Random Button lights up
+            note right: UC: flash sequence
+            Player <-- Simon:index decremented
+        end
+        loop while (player hits correct button)
+            Player -> Simon:hits button
+            note right: UC: press button
+        end
+        Player <-- Simon: score incremented
+    end
+    Player -> Memory: score
+    NOTE RIGHT: UC: publish score
+end
+@enduml
