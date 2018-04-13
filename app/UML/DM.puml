@@ -1,6 +1,6 @@
 @startuml
 
-title Simon Domain Model
+title Aubie's Memory Game Domain Model
 class Player {
 highScore
 }

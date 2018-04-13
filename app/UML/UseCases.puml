@@ -7,7 +7,7 @@
 ++ Entry conditions
 +++ The player has activated the game
 ++ Scenario
-+++ Simon flashes a sequence of colored lights
++++ Aubie flashes a sequence of colored lights
 +++ When the player hits the correct light,
 ++++ the score is increased by one,
 ++++ and the sequence of random colors are increased by one
@@ -29,7 +29,7 @@
 ++  Goal
 +++ To progress through the game
 ++ Entry conditions
-+++ Simon has previously activated a sequence of lights
++++ Aubie has previously activated a sequence of lights
 ++ Scenario
 +++ If the button press is correct,
 ++++ the system waits for the next button,
@@ -48,7 +48,7 @@
 {T
 + Flash Sequence
 ++ Goal
-+++ For Simon to flash a sequence of lights
++++ For Aubie to flash a sequence of lights
 ++ Entry conditions
 +++ The game has been started
 ++ Scenario
@@ -65,7 +65,7 @@
 }
 ---
 {T
-+ View Simon Board
++ View Aubie Board
 ++  Goal
 +++ To depict the board, buttons, and the score
 ++ Entry conditions
@@ -100,7 +100,7 @@
 +++ Failure Exit Conditions
 ++++ None
 }
----
+/'---
 {T
 + Publish Score
 ++  Goal
@@ -117,6 +117,29 @@
 +++ Failure Exit Conditions
 ++++ No score is published
 }
-
+'/
+---
+{T
++ Verify Input
+++ Goal
++++ To make sure the input by the player is correct.
+++ Entry Conditions
++++ Aubie has flashed a sequence of colors
+++ Scenario
++++ The player clicks a button
+++++ If the button is the correct choice the player will then have to hit the next choice
++++++ If that was the last button in the sequence then
++++++ the score will be increased and Aubie will flash
++++++ a new sequence of colors
+++++ If the button is not the correct choice then
++++++ The game will enter a game over stage
+++ Exceptions
++++ None
+++ Exit Conditions
++++ Successful Exit Conditions
+++++ Player moves onto next button, Aubie flashes new sequence, or Game Over
++++ Failure Exit Conditions
+++++ Game does not move on
+}
 }
 @endsalt

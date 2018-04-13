@@ -1,28 +1,33 @@
 @startuml
-title Simon SSD
+title Aubie's Memory Game SSD
 actor Player
-participant Simon
+participant Aubie
 actor Memory
 
-group SD: Simon
+group SD: Aubie's Memory Game
 
-    Player -> Simon: start
+    Player -> Aubie: start
     loop while !(gameOver)
-        Player <-- Simon:Board
+        Player <-- Aubie:Board
         note right: UC: show Simon Board
-        Player <-- Simon:Controller
-        Player <-- Simon:Button
+        Player <-- Aubie:Controller
+        Player <-- Aubie:Button
         note right: Note: index is set to score plus one
         loop while(index > 0)
-            Player <-- Simon:Random Button lights up
+            Player <-- Aubie:Random Button lights up
             note right: UC: flash sequence
-            Player <-- Simon:index decremented
+            Player <-- Aubie:index decremented
         end
         loop while (player hits correct button)
-            Player -> Simon:hits button
+            Player -> Aubie:hits button
             note right: UC: press button
+            alt player hits wrong button
+                Aubie --> Player: gameOver
+            end
         end
-        Player <-- Simon: score incremented
+        alt !gameOver
+            Player <-- Aubie: score incremented
+        end
     end
     Player -> Memory: score
     NOTE RIGHT: UC: publish score

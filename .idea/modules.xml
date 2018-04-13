@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Aubie_Memory_Game.iml" filepath="$PROJECT_DIR$/Aubie_Memory_Game.iml" />
+      <module fileurl="file://C:\Users\jsosn\Documents\GitHub\Aubie_Memory_Game\Aubie_Memory_Game.iml" filepath="C:\Users\jsosn\Documents\GitHub\Aubie_Memory_Game\Aubie_Memory_Game.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\jsosn\Documents\GitHub\Aubie_Memory_Game\app\app.iml" filepath="C:\Users\jsosn\Documents\GitHub\Aubie_Memory_Game\app\app.iml" />
     </modules>
   </component>
 </project>

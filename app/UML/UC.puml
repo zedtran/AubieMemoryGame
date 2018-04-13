@@ -2,21 +2,24 @@
 title Use Case Diagram
 
 actor Player
-actor Simon
-actor Memory
+actor Aubie
+'should aubie be an actor? and if not isnt it him verifying the input sequence?
+
 
 rectangle  {
 usecase "publish score" as UC3
 usecase "start game" as UC2
 usecase "view score" as UC1
 usecase "flash sequence" as UC4
+usecase "verify input" as UC5
 Player -- UC2
 Player -- UC1
-Simon -- UC4
+Aubie -- UC4
+Aubie -- UC5
 
 UC2 ..> (press button): <<includes>>
 UC2 ..> (show Simon board): <<includes>>
-Memory -- UC3
+
 
 }
 @enduml
