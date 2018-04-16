@@ -17,7 +17,13 @@ public class Board {
     private ArrayList<String> mSequence;
     private int mInputNumber = 0;
 
-    private int mScore = 0;
+    /* Board()
+     * constructor, runs first sequence
+     */
+    Board(){
+        aubieSequence();
+    }
+    private int mScore = 5;
 
     /* getScore()
      * returns player score
@@ -63,8 +69,9 @@ public class Board {
     /* inputSequence()
      * creates the input sequence that needs to
      * be replicated by the player
+     * input number set to zero at each new sequence
      */
-    public void inputSequence(){
+    public void aubieSequence(){
         String choices[] = {"blue", "orange", "green", "yellow"};
         mSequence = new ArrayList(mScore+1);
         mInputNumber = 0;
@@ -74,6 +81,7 @@ public class Board {
             mChoice = rand.nextInt(3);  //randomly generates sequence
             mSequence.add(choices[mChoice]);
             //add code to light up button
+            mScore--;
         }while(mScore > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
     }
@@ -90,6 +98,7 @@ public class Board {
         if(correctColor == color){//correct input
             if(mInputNumber == mSequence.size()){//new sequence needs to be generated
                 mScore++;
+                aubieSequence();
             }
             else {}//waits for next button press
             return true;
@@ -97,5 +106,13 @@ public class Board {
         else {  //incorrect input... game over
             return false;
         }
+    }
+
+    public String getSequence(){
+        String sequence = "";
+        for(int i = 0; i < mSequence.size(); i++){
+            sequence += mSequence.get(i) + " ";
+        }
+        return sequence;
     }
 }
