@@ -65,6 +65,8 @@ public class Board {
                 return mGreenKey;
             case "yellow":
                 return mYellowKey;
+            case "red":
+                return mRedKey;
             default:
                 return null;    //shouldnt happen
         }
@@ -85,14 +87,15 @@ public class Board {
      * input number set to zero at each new sequence
      */
     public void aubieSequence(){
-        String choices[] = {"blue", "orange", "green", "yellow"};
+        String choices[] = {"blue", "orange", "green", "yellow", "red"};
         mSequence = new ArrayList(mScore+1);
         mInputNumber = 0;
         Random rand = new Random();
         int mChoice;
         int index = mScore+1;
         do{     //using a do here so when the score is initially zero, beginning of game, it will still loop
-            mChoice = rand.nextInt(3);  //randomly generates sequence
+            mChoice = rand.nextInt(4 + 1 - 0) + 0;
+            //mChoice = rand.nextInt(4) + 1;  //randomly generates sequence
             mSequence.add(choices[mChoice]);
             getButton(choices[mChoice]).flashButton();  //lights up button [code not complete]
             index--;
