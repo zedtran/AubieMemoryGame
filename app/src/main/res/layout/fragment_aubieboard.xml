@@ -2,72 +2,103 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
-    <TextView
-        android:hint="kill me"
-        android:layout_width="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/test"
-        android:textSize="24dp"/>
-
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:gravity="right">
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:text="Reset" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:gravity="center">
+        <TextView
+            android:hint="Should have sequence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/test"
+            android:gravity="center"
+            android:textSize="24dp"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center">
 
-            <Button
-                android:id="@+id/orange"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Orange" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-            <Button
-                android:id="@+id/yellow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Yellow" />
-        </TableRow>
+                <Button
+                    android:id="@+id/orange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/orange"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+                <Button
+                    android:id="@+id/yellow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/yellow"/>
+            </TableRow>
 
-            <Button
-                android:id="@+id/blue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Blue" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-        </TableRow>
+                <Button
+                    android:id="@+id/blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/blue"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+            </TableRow>
 
-            <Button
-                android:id="@+id/green"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/green" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-            <Button
-                android:id="@+id/red"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Red" />
-        </TableRow>
+                <Button
+                    android:id="@+id/green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/green"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
+                <Button
+                    android:id="@+id/red"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/red"/>
+            </TableRow>
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableLayout>
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Score: 0"
+            android:textSize="24dp"/>
+    </LinearLayout>
 </LinearLayout>

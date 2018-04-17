@@ -1,5 +1,7 @@
 package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
+import android.widget.Button;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,10 +11,13 @@ import java.util.Random;
 
 public class Board {
 
-    private Button mBlueButton = new Button("blue");
-    private Button mOrangeButton = new Button("orange");
-    private Button mGreenButton = new Button("green");
-    private Button mYellowButton = new Button("yellow");
+    private Key mBlueKey = new Key("blue");
+    private Key mOrangeKey = new Key("orange");
+    private Key mGreenKey = new Key("green");
+    private Key mYellowKey = new Key("yellow");
+    private Key mRedKey = new Key("red");
+
+
 
     private ArrayList<String> mSequence;
     private int mInputNumber = 0;
@@ -20,10 +25,18 @@ public class Board {
     /* Board()
      * constructor, runs first sequence
      */
-    Board(){
+    Board(android.widget.Button mOrangeButton, android.widget.Button mYellowButton,
+          android.widget.Button mGreenButton, android.widget.Button mRedButton,
+          android.widget.Button mBlueButton){
         aubieSequence();
+        mBlueKey.setButton(mBlueButton);
+        mOrangeKey.setButton(mBlueButton);
+        mYellowKey.setButton(mBlueButton);
+        mGreenKey.setButton(mBlueButton);
+        mRedKey.setButton(mRedButton);
     }
-    private int mScore = 5;
+
+    private int mScore = 0;
 
     /* getScore()
      * returns player score
@@ -42,16 +55,16 @@ public class Board {
     /* getButton(color)
      * returns gets button object
      */
-    public Button getButton(String color) {
+    public Key getButton(String color) {
         switch (color) {
             case "blue":
-                return mBlueButton;
+                return mBlueKey;
             case "orange":
-                return mOrangeButton;
+                return mOrangeKey;
             case "green":
-                return mGreenButton;
+                return mGreenKey;
             case "yellow":
-                return mYellowButton;
+                return mYellowKey;
             default:
                 return null;    //shouldnt happen
         }
@@ -77,12 +90,13 @@ public class Board {
         mInputNumber = 0;
         Random rand = new Random();
         int mChoice;
+        int index = mScore+1;
         do{     //using a do here so when the score is initially zero, beginning of game, it will still loop
             mChoice = rand.nextInt(3);  //randomly generates sequence
             mSequence.add(choices[mChoice]);
-            //add code to light up button
-            mScore--;
-        }while(mScore > 0);
+            getButton(choices[mChoice]).flashButton();  //lights up button [code not complete]
+            index--;
+        }while(index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
     }
 
@@ -101,18 +115,27 @@ public class Board {
                 aubieSequence();
             }
             else {}//waits for next button press
-            return true;
-        }
-        else {  //incorrect input... game over
             return false;
         }
+        else {  //incorrect input... game over
+            return true;
+        }
     }
-
+    /* getSequence()
+     * Returns expected sequence of colors
+     */
     public String getSequence(){
         String sequence = "";
         for(int i = 0; i < mSequence.size(); i++){
             sequence += mSequence.get(i) + " ";
         }
         return sequence;
+    }
+    /* reset()
+     * Resets game
+     */
+    public void reset(){
+        mScore = 0;
+        aubieSequence();
     }
 }
