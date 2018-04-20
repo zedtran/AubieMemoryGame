@@ -135,7 +135,7 @@ public class Board {
      */
     public String getSequenceString() {
         String sequence = "";
-        for (int i = 0; i < mSequence.size(); i++) sequence.concat(mSequence.get(i) + " ");
+        for (int i = 0; i < mSequence.size(); i++) sequence += (mSequence.get(i) + " ");
         return sequence;
     }
 

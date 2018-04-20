@@ -51,7 +51,7 @@ public class AubieFragment extends Fragment {
         mResetButton =  v.findViewById(R.id.reset);
 
         mBoard = new Board(mOrangeButton, mYellowButton, mGreenButton, mRedButton, mBlueButton);
-        mSequence.setText(mBoard.getSequenceString());    //sets up default text views
+        //mSequence.setText(mBoard.getSequenceString());    //sets up default text views
 
         runFirstFlash();
 
@@ -97,7 +97,8 @@ public class AubieFragment extends Fragment {
             public void onClick(View view) {
                 mBoard.reset();
                 mGameOver = false;
-                mSequence.setText(mBoard.getSequenceString());
+                //mSequence.setText(mBoard.getSequenceString());
+                mSequence.setText("");
                 runFirstFlash();
                 mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
             }
@@ -112,7 +113,7 @@ public class AubieFragment extends Fragment {
     public void click(String color, TextView mSequence, TextView mScoreBoard) {
         if (!mGameOver) {
             mGameOver = mBoard.checkInput(color);
-            mSequence.setText(mBoard.getSequenceString());
+            //mSequence.setText(mBoard.getSequenceString());
             mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
         }
         if (mGameOver) {
