@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Aubie_Memory</string>
-    <string name="green">Green</string>
+    <string name="score">Score: %1$s</string>
+    <string name="gameOver">GAME OVER</string>
+    <string name="GREEN">green</string>
+    <string name="ORANGE">orange</string>
+    <string name="YELLOW">yellow</string>
+    <string name="RED">red</string>
+    <string name="BLUE">blue</string>
 </resources>
