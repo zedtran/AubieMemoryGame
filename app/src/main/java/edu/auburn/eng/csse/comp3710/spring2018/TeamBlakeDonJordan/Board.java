@@ -2,6 +2,9 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,32 +21,27 @@ public class Board {
     private static final String YELLOW = "yellow";
     private static final String GREEN = "green";
 
-
-    private Light mBlueLight = new Light();
-    private Light mOrangeLight = new Light();
-    private Light mGreenLight = new Light();
-    private Light mYellowLight = new Light();
-    private Light mRedLight = new Light();
+    private Button mGreenButton;
+    private Button mOrangeButton;
+    private Button mYellowButton;
+    private Button mRedButton;
+    private Button mBlueButton;
 
     private ArrayList<String> mSequence;
     private int mInputNumber = 0;
+    private int mScore = 0;
 
     /* Board()
      * constructor, runs first sequence
      */
-    Board(android.widget.Button mOrangeButton, android.widget.Button mYellowButton,
-          android.widget.Button mGreenButton, android.widget.Button mRedButton,
-          android.widget.Button mBlueButton) {
-
+    Board(Button mOrangeB, Button mYellowB, Button mGreenB, Button mRedB, Button mBlueB) {
         aubieSequence();
-        mBlueLight.setButton(mBlueButton);
-        mOrangeLight.setButton(mOrangeButton);
-        mYellowLight.setButton(mYellowButton);
-        mGreenLight.setButton(mGreenButton);
-        mRedLight.setButton(mRedButton);
+        this.mGreenButton = mGreenB;
+        this.mOrangeButton = mOrangeB;
+        this.mBlueButton = mBlueB;
+        this.mRedButton = mRedB;
+        this.mYellowButton = mYellowB;
     }
-
-    private int mScore = 0;
 
     /* getScore()
      * returns player score
@@ -62,23 +60,22 @@ public class Board {
     /* getButton(color)
      * returns gets button object
      */
-    public Light getLight(String color) {
+    public Button getButton(String color) {
         switch (color) {
             case BLUE:
-                return mBlueLight;
+                return mBlueButton;
             case ORANGE:
-                return mOrangeLight;
+                return mOrangeButton;
             case GREEN:
-                return mGreenLight;
+                return mGreenButton;
             case YELLOW:
-                return mYellowLight;
+                return mYellowButton;
             case RED:
-                return mRedLight;
+                return mRedButton;
             default:
                 return null;    //shouldn't happen
         }
     }
-
 
     /* inputSequence()
      * creates the input sequence that needs to
@@ -90,20 +87,20 @@ public class Board {
         mSequence = new ArrayList<>(mScore + 1);
         mInputNumber = 0;
         Random rand = new Random();
-        ArrayList<Animator> AnimatorArray;
-        int mChoice;
+        ArrayList<Animator> AnimatorArray  = new ArrayList<>();
         int index = mScore + 1;
-        AnimatorArray = new ArrayList<>();
-        do
-        {     //using a do here so when the score is initially zero, beginning of game, it will still loop
-            mChoice = rand.nextInt(5);
-            String choice = choices[mChoice];
-            mSequence.add(choice);
-            AnimatorArray.add(getLight(choice).flashButton());
+        String chosenColor;
+        int mRandom;
+        do //using a do here so when the score is initially zero, beginning of game, it will still loop
+        {
+            mRandom = rand.nextInt(5);
+            chosenColor = choices[mRandom];
+            mSequence.add(chosenColor);
+            AnimatorArray.add(flashButton(getButton(chosenColor)));
             index--;
         } while (index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
-        if (mScore != 0) {
+        if (mScore >= 0) {      //wont work first try since the view isnt created yet
             AnimatorSet s = new AnimatorSet();
             s.playSequentially(AnimatorArray);
             s.start();
@@ -147,7 +144,22 @@ public class Board {
         aubieSequence();
     }
 
-    public ArrayList<String> getSequence() {
+    /* getSequenceList()
+     * returns list of sequence objects
+     * may not be needed
+     */
+    public ArrayList<String> getSequenceList() {
         return mSequence;
+    }
+
+    /* flashButton(mButton)
+     * adds animator to the button to be flashed
+     */
+    public Animator flashButton(Button mButton) {
+        ObjectAnimator anim = ObjectAnimator.ofFloat(mButton, "alpha", 1, 0);   //sets so the opacity of the object goes from 100% to 0%
+        anim.setDuration(500);                          //time it takes to run the animator, so 500 milliseconds
+        anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
+        anim.setRepeatCount(1);                         //repeats only once
+        return anim;
     }
 }

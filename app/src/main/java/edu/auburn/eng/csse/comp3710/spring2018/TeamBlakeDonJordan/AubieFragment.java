@@ -123,13 +123,7 @@ public class AubieFragment extends Fragment {
 
 
     private void runFirstFlash() {
-        Button mButton = mBoard.getLight(mBoard.getSequence().get(0)).getButton();
-        android.view.animation.Animation mAnimation = new android.view.animation.AlphaAnimation(1, 0);
-        mAnimation.setDuration(500);
-        mAnimation.setInterpolator(new android.view.animation.LinearInterpolator());
-        mAnimation.setRepeatCount(1);
-        mAnimation.setRepeatMode(android.view.animation.Animation.REVERSE);
-        mButton.startAnimation(mAnimation);
+        mBoard.flashButton(mBoard.getButton(mBoard.getSequenceList().get(0)));
     }
 
 }

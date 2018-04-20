@@ -6,4 +6,5 @@ This readme file contains the following information:
 
 3. Special instructions needed to build the app (if none, please indicate "none").
 
-4. A list of known bugs.
+4. A list of known bugs:
+	
