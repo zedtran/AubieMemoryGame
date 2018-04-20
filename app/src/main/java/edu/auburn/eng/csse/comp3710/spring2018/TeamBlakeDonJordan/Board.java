@@ -11,11 +11,11 @@ import java.util.Random;
 
 public class Board {
 
-    private Key mBlueKey = new Key("blue");
-    private Key mOrangeKey = new Key("orange");
-    private Key mGreenKey = new Key("green");
-    private Key mYellowKey = new Key("yellow");
-    private Key mRedKey = new Key("red");
+    private Light mBlueLight = new Light("blue");
+    private Light mOrangeLight = new Light("orange");
+    private Light mGreenLight = new Light("green");
+    private Light mYellowLight = new Light("yellow");
+    private Light mRedLight = new Light("red");
 
 
 
@@ -28,12 +28,13 @@ public class Board {
     Board(android.widget.Button mOrangeButton, android.widget.Button mYellowButton,
           android.widget.Button mGreenButton, android.widget.Button mRedButton,
           android.widget.Button mBlueButton){
+
         aubieSequence();
-        mBlueKey.setButton(mBlueButton);
-        mOrangeKey.setButton(mBlueButton);
-        mYellowKey.setButton(mBlueButton);
-        mGreenKey.setButton(mBlueButton);
-        mRedKey.setButton(mRedButton);
+        mBlueLight.setButton(mBlueButton);
+        mOrangeLight.setButton(mOrangeButton);
+        mYellowLight.setButton(mYellowButton);
+        mGreenLight.setButton(mGreenButton);
+        mRedLight.setButton(mRedButton);
     }
 
     private int mScore = 0;
@@ -55,31 +56,23 @@ public class Board {
     /* getButton(color)
      * returns gets button object
      */
-    public Key getButton(String color) {
+    public Light getLight(String color) {
         switch (color) {
             case "blue":
-                return mBlueKey;
+                return mBlueLight;
             case "orange":
-                return mOrangeKey;
+                return mOrangeLight;
             case "green":
-                return mGreenKey;
+                return mGreenLight;
             case "yellow":
-                return mYellowKey;
+                return mYellowLight;
             case "red":
-                return mRedKey;
+                return mRedLight;
             default:
                 return null;    //shouldnt happen
         }
     }
 
-    /* setLit(color)
-     * set button to light up
-     * may be replaced in the future, not sure if
-     * a function is worth it
-     */
-    public void setLit(String color){
-        getButton(color).setLit(true);
-    }
 
     /* inputSequence()
      * creates the input sequence that needs to
@@ -94,13 +87,15 @@ public class Board {
         int mChoice;
         int index = mScore+1;
         do{     //using a do here so when the score is initially zero, beginning of game, it will still loop
-            mChoice = rand.nextInt(4 + 1 - 0) + 0;
-            //mChoice = rand.nextInt(4) + 1;  //randomly generates sequence
+            mChoice = rand.nextInt(5) ;
             mSequence.add(choices[mChoice]);
-            getButton(choices[mChoice]).flashButton();  //lights up button [code not complete]
+            if(mScore != 0)
+                getLight(choices[mChoice]).flashButton();
             index--;
         }while(index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
+        if (mScore != 0)
+            flashAnimation();
     }
 
     /* checkInput(color)
@@ -127,7 +122,7 @@ public class Board {
     /* getSequence()
      * Returns expected sequence of colors
      */
-    public String getSequence(){
+    public String getSequenceString(){
         String sequence = "";
         for(int i = 0; i < mSequence.size(); i++){
             sequence += mSequence.get(i) + " ";
@@ -140,5 +135,21 @@ public class Board {
     public void reset(){
         mScore = 0;
         aubieSequence();
+    }
+
+    public ArrayList<String> getSequence(){
+        return mSequence;
+    }
+
+    public void flashAnimation(){
+        int i = 0;
+        while(i < mSequence.size()){
+            final Light mLight = getLight(mSequence.get(i));
+            mLight.flashButton();  //lights up button [code not complete]
+            //mLight.getButton().clearAnimation();
+            i++;
+        }
+
+
     }
 }

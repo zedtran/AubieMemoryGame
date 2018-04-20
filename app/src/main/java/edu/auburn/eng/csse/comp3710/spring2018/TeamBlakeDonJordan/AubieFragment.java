@@ -34,7 +34,7 @@ public class AubieFragment extends Fragment {
         }
     }
 
-    @Override
+     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.fragment_aubieboard, container, false);
@@ -50,51 +50,72 @@ public class AubieFragment extends Fragment {
         mResetButton = (Button) v.findViewById(R.id.reset);
 
         mBoard = new Board(mOrangeButton, mYellowButton, mGreenButton, mRedButton, mBlueButton);
-        mSequence.setText(mBoard.getSequence());    //sets up default text views
+        mSequence.setText(mBoard.getSequenceString());    //sets up default text views
+
+
+        android.view.animation.Animation mAnimation = new android.view.animation.AlphaAnimation(1, 0);
+        mAnimation.setDuration(200);
+        mAnimation.setInterpolator(new android.view.animation.LinearInterpolator());
+        mAnimation.setRepeatCount(1);
+        mAnimation.setRepeatMode(android.view.animation.Animation.REVERSE);
+        Button mButton = mBoard.getLight(mBoard.getSequence().get(0)).getButton();
+        mButton.startAnimation(mAnimation);
+        //mButton.clearAnimation();
 
 
         //sets up listeners for buttons
         mGreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                      //Green
+                //mGreenButton.clearAnimation();
                 click(GREEN, mSequence, mScoreBoard);
             }
         });
         mOrangeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                  //Orange
+                //mOrangeButton.clearAnimation();
                 click(ORANGE, mSequence, mScoreBoard);
             }
         });
         mYellowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                       //Yellow
+                //mYellowButton.clearAnimation();
                 click(YELLOW, mSequence, mScoreBoard);
             }
         });
         mRedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                          //Red
+                //mRedButton.clearAnimation();
                 click(RED, mSequence, mScoreBoard);
             }
         });
         mBlueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                         //Blue
+                //mBlueButton.clearAnimation();
                 click(BLUE, mSequence, mScoreBoard);
             }
         });
         mResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //mBlueButton.clearAnimation();       //these will be removed once
+                //mRedButton.clearAnimation();        //flash works properly
+                //mYellowButton.clearAnimation();
+                //mOrangeButton.clearAnimation();
+                //mGreenButton.clearAnimation();
                 mBoard.reset();
                 mGameOver = false;
-                mSequence.setText(mBoard.getSequence());
+                mSequence.setText(mBoard.getSequenceString());
                 mScoreBoard.setText("Score: " + Integer.toString(mBoard.getScore()));
             }
         });
         return v;
     }
+
     /* click(color, mSequence, mScoreBoard)
      * deals with player clicks. sets new sequence (will need to be removed eventually, sets game
      * over and sets score
@@ -102,7 +123,7 @@ public class AubieFragment extends Fragment {
     public void click(String color, TextView mSequence, TextView mScoreBoard) {
          if(!mGameOver) {
             mGameOver = mBoard.checkInput(color);
-            mSequence.setText(mBoard.getSequence());
+            mSequence.setText(mBoard.getSequenceString());
             mScoreBoard.setText("Score: " + Integer.toString(mBoard.getScore()));
         }
         if(mGameOver) {
