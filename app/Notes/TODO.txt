@@ -1,0 +1,10 @@
+1) Add Splash Screen Activity
+2) Add Splash Screen Layout
+3) Add Leaderboard Activity
+4) Add Leaderboard Layout
+5) Add Read/Write Save File Ability
+6) Make it so user cannot input while animation is running
+7) Provide User Feedback when button is pressed
+8) Add sounds for when button is pushed
+9) Add in screen rotation contingency 
+10) Add more comments (for Jordan)

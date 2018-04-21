@@ -1,0 +1,2 @@
+Add in abilitiy to choose between original SIMON and our game, ours being one that has a sequence that doesnt build on the previous one.
+This would be fairly simple to implement and I feel like Dr. Umphress would like that extra mile so to speak
