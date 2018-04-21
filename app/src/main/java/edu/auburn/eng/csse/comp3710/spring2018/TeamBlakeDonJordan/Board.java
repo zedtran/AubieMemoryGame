@@ -5,7 +5,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.widget.Button;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,17 +14,19 @@ import java.util.Random;
 
 public class Board {
 
-    private static final String BLUE = "blue";
     private static final String RED = "red";
-    private static final String ORANGE = "orange";
+    private static final String BLUE = "blue";
     private static final String YELLOW = "yellow";
     private static final String GREEN = "green";
+    private static final String ORANGE = "orange";
 
-    private Button mGreenButton;
-    private Button mOrangeButton;
-    private Button mYellowButton;
+
     private Button mRedButton;
     private Button mBlueButton;
+    private Button mYellowButton;
+    private Button mGreenButton;
+    private Button mOrangeButton;
+
 
     private ArrayList<String> mSequence;
     private int mInputNumber = 0;
@@ -35,13 +36,13 @@ public class Board {
     /* Board()
      * constructor, runs first sequence
      */
-    Board(Button mOrangeB, Button mYellowB, Button mGreenB, Button mRedB, Button mBlueB) {
+    Board(Button mRedB, Button mBlueB, Button mYellowB, Button mGreenB, Button mOrangeB) {
         aubieSequence();
+        this.mRedButton = mRedB;
+        this.mBlueButton = mBlueB;
+        this.mYellowButton = mYellowB;
         this.mGreenButton = mGreenB;
         this.mOrangeButton = mOrangeB;
-        this.mBlueButton = mBlueB;
-        this.mRedButton = mRedB;
-        this.mYellowButton = mYellowB;
     }
 
     /* getScore()
@@ -63,16 +64,16 @@ public class Board {
      */
     public Button getButton(String color) {
         switch (color) {
-            case BLUE:
-                return mBlueButton;
-            case ORANGE:
-                return mOrangeButton;
-            case GREEN:
-                return mGreenButton;
-            case YELLOW:
-                return mYellowButton;
             case RED:
                 return mRedButton;
+            case BLUE:
+                return mBlueButton;
+            case YELLOW:
+                return mYellowButton;
+            case GREEN:
+                return mGreenButton;
+            case ORANGE:
+                return mOrangeButton;
             default:
                 return null;    //shouldn't happen
         }
@@ -84,7 +85,7 @@ public class Board {
      * input number set to zero at each new sequence
      */
     private void aubieSequence() {
-        String choices[] = {BLUE, ORANGE, GREEN, YELLOW, RED};
+        String choices[] = {RED, BLUE, YELLOW, GREEN, ORANGE};
         mSequence = new ArrayList<>(mScore + 1);
         mInputNumber = 0;
         Random rand = new Random();
@@ -132,9 +133,9 @@ public class Board {
      * Returns expected sequence of colors
      */
     public String getSequenceString() {
-        String sequence = "";
-        for (int i = 0; i < mSequence.size(); i++) sequence += (mSequence.get(i) + " ");
-        return sequence;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < mSequence.size(); i++) builder.append(mSequence.get(i) + " ");
+        return builder.toString();
     }
 
     /* reset()

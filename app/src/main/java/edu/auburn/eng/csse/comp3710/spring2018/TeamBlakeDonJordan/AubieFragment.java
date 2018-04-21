@@ -3,6 +3,7 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
 
 import android.app.Fragment;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -30,79 +31,78 @@ public class AubieFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
-        Button mGreenButton;
-        Button mOrangeButton;
-        Button mYellowButton;
         Button mRedButton;
         Button mBlueButton;
+        Button mYellowButton;
+        Button mGreenButton;
+        Button mOrangeButton;
         Button mResetButton;
+
 
         View v = inflater.inflate(R.layout.fragment_aubieboard, container, false);
         mSequence = v.findViewById(R.id.test);
         final TextView mScoreBoard = v.findViewById(R.id.score);
 
         //creates all buttons
+        mRedButton = v.findViewById(R.id.red);
+        mBlueButton = v.findViewById(R.id.blue);
+        mYellowButton = v.findViewById(R.id.yellow);
         mGreenButton = v.findViewById(R.id.green);
         mOrangeButton = v.findViewById(R.id.orange);
-        mRedButton = v.findViewById(R.id.red);
-        mYellowButton = v.findViewById(R.id.yellow);
-        mBlueButton = v.findViewById(R.id.blue);
         mResetButton =  v.findViewById(R.id.reset);
 
-        mBoard = new Board(mOrangeButton, mYellowButton, mGreenButton, mRedButton, mBlueButton);
+        mBoard = new Board(mRedButton, mBlueButton, mYellowButton, mGreenButton, mOrangeButton);
         //mSequence.setText(mBoard.getSequenceString());    //sets up default text views
-
-        runFirstFlash();
 
 
         //sets up listeners for buttons
-        mGreenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View view) {                      //Green
-                //mGreenButton.clearAnimation();
-                click(getString(R.string.GREEN), mSequence, mScoreBoard);
-            }
-        });
-        mOrangeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View view) {                  //Orange
-                //mOrangeButton.clearAnimation();
-                click(getString(R.string.ORANGE), mSequence, mScoreBoard);
-            }
-        });
-        mYellowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View view) {                       //Yellow
-                //mYellowButton.clearAnimation();
-                click(getString(R.string.YELLOW), mSequence, mScoreBoard);
-            }
-        });
         mRedButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(android.view.View view) {                          //Red
+            public void onClick(android.view.View view) {                               //Red
                 //mRedButton.clearAnimation();
                 click(getString(R.string.RED), mSequence, mScoreBoard);
             }
         });
         mBlueButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(android.view.View view) {                         //Blue
+            public void onClick(android.view.View view) {                              //Blue
                 //mBlueButton.clearAnimation();
                 click(getString(R.string.BLUE), mSequence, mScoreBoard);
             }
         });
+        mYellowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View view) {                            //Yellow
+                //mYellowButton.clearAnimation();
+                click(getString(R.string.YELLOW), mSequence, mScoreBoard);
+            }
+        });
+        mGreenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View view) {                             //Green
+                //mGreenButton.clearAnimation();
+                click(getString(R.string.GREEN), mSequence, mScoreBoard);
+            }
+        });
+        mOrangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View view) {                            //Orange
+                //mOrangeButton.clearAnimation();
+                click(getString(R.string.ORANGE), mSequence, mScoreBoard);
+            }
+        });
         mResetButton.setOnClickListener(new View.OnClickListener() {            //Reset Button
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {                             //Reset
                 mBoard.reset();
                 mGameOver = false;
-                //mSequence.setText(mBoard.getSequenceString());
-                mSequence.setText("");
-                runFirstFlash();
+                mSequence.setText("");      //remove once mSequence is removed
                 mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
             }
         });
+
+        mBoard.flashButton(mBoard.getButton(mBoard.getSequenceList().get(0))).start();
+
         return v;
     }
 
@@ -112,6 +112,24 @@ public class AubieFragment extends Fragment {
      */
     public void click(String color, TextView mSequence, TextView mScoreBoard) {
        if(!mBoard.isAnimatorRunning()) {
+           switch (color){
+               case "red":
+                   MediaPlayer.create(getContext(), R.raw.anote_red).start();
+                   break;
+               case "blue":
+                   MediaPlayer.create(getContext(), R.raw.enote_blue).start();
+                   break;
+               case "yellow":
+                   MediaPlayer.create(getContext(), R.raw.csharpnote_yellow).start();
+                   break;
+               case "green":
+                   MediaPlayer.create(getContext(), R.raw.enote_green).start();
+                   break;
+               case "orange":
+                   MediaPlayer.create(getContext(), R.raw.fnote_orange).start();
+                   break;
+               default:
+           }
            if (!mGameOver) {
                mGameOver = mBoard.checkInput(color);
                //mSequence.setText(mBoard.getSequenceString());
@@ -122,10 +140,4 @@ public class AubieFragment extends Fragment {
            }
        }
     }
-
-
-    private void runFirstFlash() {
-        mBoard.flashButton(mBoard.getButton(mBoard.getSequenceList().get(0)));
-    }
-
 }
