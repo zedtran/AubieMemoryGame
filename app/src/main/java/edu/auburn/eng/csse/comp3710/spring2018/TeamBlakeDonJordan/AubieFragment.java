@@ -111,14 +111,16 @@ public class AubieFragment extends Fragment {
      * over and sets score
      */
     public void click(String color, TextView mSequence, TextView mScoreBoard) {
-        if (!mGameOver) {
-            mGameOver = mBoard.checkInput(color);
-            //mSequence.setText(mBoard.getSequenceString());
-            mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
-        }
-        if (mGameOver) {
-            mSequence.setText(getString(R.string.gameOver));
-        }
+       if(!mBoard.isAnimatorRunning()) {
+           if (!mGameOver) {
+               mGameOver = mBoard.checkInput(color);
+               //mSequence.setText(mBoard.getSequenceString());
+               mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
+           }
+           if (mGameOver) {
+               mSequence.setText(getString(R.string.gameOver));
+           }
+       }
     }
 
 

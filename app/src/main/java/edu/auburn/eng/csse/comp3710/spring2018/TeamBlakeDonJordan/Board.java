@@ -31,6 +31,7 @@ public class Board {
     private int mInputNumber = 0;
     private int mScore = 0;
 
+    private AnimatorSet mAnimation;
     /* Board()
      * constructor, runs first sequence
      */
@@ -101,9 +102,9 @@ public class Board {
         } while (index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
         if (mScore >= 0) {      //wont work first try since the view isnt created yet
-            AnimatorSet s = new AnimatorSet();
-            s.playSequentially(AnimatorArray);
-            s.start();
+            mAnimation = new AnimatorSet();
+            mAnimation.playSequentially(AnimatorArray);
+            mAnimation.start();
         }
     }
 
@@ -141,6 +142,7 @@ public class Board {
      */
     public void reset() {
         mScore = 0;
+        mAnimation.end();
         aubieSequence();
     }
 
@@ -161,5 +163,11 @@ public class Board {
         anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
         anim.setRepeatCount(1);                         //repeats only once
         return anim;
+    }
+    /* isAnimatorRunning()
+     * returns true/false if animator is running
+     */
+    public boolean isAnimatorRunning(){
+        return mAnimation.isRunning();
     }
 }
