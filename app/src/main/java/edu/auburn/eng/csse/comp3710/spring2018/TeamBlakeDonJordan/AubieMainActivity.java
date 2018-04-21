@@ -16,9 +16,15 @@ public class AubieMainActivity extends Activity {
         setContentView(R.layout.activity_aubie_main);
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
+        /*
         if (fragment == null){
             fragment = new AubieFragment();
+            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+        }*/
+
+
+        if (fragment == null){
+            fragment = new MainMenuFragment();
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
     }

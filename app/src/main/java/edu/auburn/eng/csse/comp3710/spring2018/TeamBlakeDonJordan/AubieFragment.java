@@ -26,11 +26,17 @@ public class AubieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // if (savedInstanceState != null) {}
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.fragment_aubieboard, container, false);
+        Bundle bundle = getArguments();
+        boolean mPlayOriginal = true;
+        if (bundle != null) {
+            mPlayOriginal = bundle.getBoolean("PLAY_ORIGINAL");
+        }
+
         Button mRedButton;
         Button mBlueButton;
         Button mYellowButton;
@@ -39,7 +45,7 @@ public class AubieFragment extends Fragment {
         Button mResetButton;
 
 
-        View v = inflater.inflate(R.layout.fragment_aubieboard, container, false);
+
         mSequence = v.findViewById(R.id.test);
         final TextView mScoreBoard = v.findViewById(R.id.score);
 
@@ -51,7 +57,7 @@ public class AubieFragment extends Fragment {
         mOrangeButton = v.findViewById(R.id.orange);
         mResetButton =  v.findViewById(R.id.reset);
 
-        mBoard = new Board(mRedButton, mBlueButton, mYellowButton, mGreenButton, mOrangeButton);
+        mBoard = new Board(mRedButton, mBlueButton, mYellowButton, mGreenButton, mOrangeButton, mPlayOriginal);
         //mSequence.setText(mBoard.getSequenceString());    //sets up default text views
 
 
@@ -112,7 +118,7 @@ public class AubieFragment extends Fragment {
      */
     public void click(String color, TextView mSequence, TextView mScoreBoard) {
        if(!mBoard.isAnimatorRunning()) {
-           switch (color){
+           /*switch (color){
                case "red":
                    MediaPlayer.create(getContext(), R.raw.anote_red).start();
                    break;
@@ -129,7 +135,7 @@ public class AubieFragment extends Fragment {
                    MediaPlayer.create(getContext(), R.raw.fnote_orange).start();
                    break;
                default:
-           }
+           }*/
            if (!mGameOver) {
                mGameOver = mBoard.checkInput(color);
                //mSequence.setText(mBoard.getSequenceString());

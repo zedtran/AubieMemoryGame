@@ -27,17 +27,20 @@ public class Board {
     private Button mGreenButton;
     private Button mOrangeButton;
 
-
-    private ArrayList<String> mSequence;
-    private int mInputNumber = 0;
     private int mScore = 0;
+    private int mInputNumber = 0;
+    private ArrayList<String> mSequence = new ArrayList<>();
+    private ArrayList<Animator> AnimatorArray = new ArrayList<>();
 
     private AnimatorSet mAnimation;
+    private boolean playOriginal;
     /* Board()
      * constructor, runs first sequence
      */
-    Board(Button mRedB, Button mBlueB, Button mYellowB, Button mGreenB, Button mOrangeB) {
-        aubieSequence();
+    Board(Button mRedB, Button mBlueB, Button mYellowB, Button mGreenB, Button mOrangeB, boolean playOriginal) {
+        if (playOriginal) simonSequence();
+        else aubieSequence();
+        this.playOriginal = playOriginal;
         this.mRedButton = mRedB;
         this.mBlueButton = mBlueB;
         this.mYellowButton = mYellowB;
@@ -79,7 +82,7 @@ public class Board {
         }
     }
 
-    /* inputSequence()
+    /* aubieSequence()
      * creates the input sequence that needs to
      * be replicated by the player
      * input number set to zero at each new sequence
@@ -89,19 +92,38 @@ public class Board {
         mSequence = new ArrayList<>(mScore + 1);
         mInputNumber = 0;
         Random rand = new Random();
-        ArrayList<Animator> AnimatorArray  = new ArrayList<>();
+        AnimatorArray  = new ArrayList<>();
         int index = mScore + 1;
-        String chosenColor;
-        int mRandom;
         do //using a do here so when the score is initially zero, beginning of game, it will still loop
         {
-            mRandom = rand.nextInt(5);
-            chosenColor = choices[mRandom];
+            String chosenColor = choices[rand.nextInt(5)];
             mSequence.add(chosenColor);
             AnimatorArray.add(flashButton(getButton(chosenColor)));
             index--;
         } while (index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
+        if (mScore >= 0) {      //wont work first try since the view isnt created yet
+            mAnimation = new AnimatorSet();
+            mAnimation.playSequentially(AnimatorArray);
+            mAnimation.start();
+        }
+    }
+    /* simonSequence()
+     * creates the input sequence that builds on prior iterations
+     * that needs to be replicated by the player
+     * input number set to zero at each new sequence
+     */
+    private void simonSequence() {
+        String choices[] = {RED, BLUE, YELLOW, GREEN, ORANGE};
+        mInputNumber = 0;
+        Random rand = new Random();
+        String chosenColor = choices[rand.nextInt(5)];
+        mSequence.add(chosenColor);
+        AnimatorArray.add(flashButton(getButton(chosenColor)));
+        mSequence.trimToSize(); //just in case mSequence gets to big
+        if(mScore == 1){
+            AnimatorArray.set(0, flashButton(getButton(mSequence.get(0))));
+        }
         if (mScore >= 0) {      //wont work first try since the view isnt created yet
             mAnimation = new AnimatorSet();
             mAnimation.playSequentially(AnimatorArray);
@@ -121,7 +143,9 @@ public class Board {
         if (correctColor.equals(color)) {//correct input
             if (mInputNumber == mSequence.size()) {//new sequence needs to be generated
                 mScore++;
-                aubieSequence();
+                if(playOriginal) simonSequence();
+                else aubieSequence();
+
             }
             return false;
         } else {  //incorrect input... game over
@@ -144,7 +168,12 @@ public class Board {
     public void reset() {
         mScore = 0;
         mAnimation.end();
-        aubieSequence();
+        if(playOriginal){
+            mSequence = new ArrayList<>();
+            AnimatorArray = new ArrayList<>();
+            simonSequence();
+        }
+        else aubieSequence();
     }
 
     /* getSequenceList()
