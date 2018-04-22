@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Aubie_Memory</string>
-    <string name="score">Score: %1$s</string>
+    <string name="score">Final Score: %1$s\n\n\n\n</string>
     <string name="gameOver">GAME OVER</string>
     <string name="GREEN">green</string>
     <string name="ORANGE">orange</string>

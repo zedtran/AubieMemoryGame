@@ -2,25 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
-    android:gravity="center">
+    android:visibility="visible">
+
     <Button
         android:id="@+id/aubie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/AUBIE"
         android:background="@color/orange"
+        android:text="@string/AUBIE"
         android:textColor="@color/blue"
-        android:textSize="23dp"/>
+        android:textSize="23dp" />
+
     <Button
         android:id="@+id/simon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/SIMON"
+        android:layout_marginTop="10dp"
         android:background="@color/black"
+        android:text="@string/SIMON"
         android:textColor="@color/white"
-        android:textSize="23dp"
-        android:layout_marginTop="10dp"/>
+        android:textSize="23dp" />
 
 
 </LinearLayout>

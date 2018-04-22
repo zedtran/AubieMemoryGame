@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right">
-        <Button
-            android:id="@+id/reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/red"
-            android:textColor="@color/white"
-            android:text="Reset" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
+
         <TextView
+            android:id="@+id/gameType"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="Game Type"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/test"
-            android:gravity="center"
-            android:textSize="24dp"/>
+            android:hint="Final Score: 0\n\n"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+
+        android:orientation="vertical">
 
         <TableLayout
             android:layout_width="wrap_content"
@@ -43,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/greenbutton"/>
+                    android:background="@drawable/greenbutton" />
 
                 <Button
                     android:id="@+id/red"
@@ -51,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/redbutton"/>
+                    android:background="@drawable/redbutton" />
             </TableRow>
 
             <TableRow
@@ -64,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/orangebutton"/>
+                    android:background="@drawable/orangebutton" />
 
             </TableRow>
 
@@ -78,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/yellowbutton"/>
+                    android:background="@drawable/yellowbutton" />
 
                 <Button
                     android:id="@+id/blue"
@@ -86,18 +93,75 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/bluebutton"/>
+                    android:background="@drawable/bluebutton" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </TableLayout>
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Score: 0"
-            android:textSize="24dp"/>
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/gameover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Game Over"
+                android:textSize="24dp"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="bottom|left"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/replay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:text="Replay"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="bottom|right"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/reset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/redbutton"
+                    android:text="Reset"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

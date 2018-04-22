@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.Button;
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,7 +14,7 @@ import java.util.Random;
  * Created by Jordan, Don, and Blake on 4/12/2018.
  */
 
-public class Board {
+public class Board implements Parcelable {
 
     private static final String RED = "red";
     private static final String BLUE = "blue";
@@ -31,8 +33,7 @@ public class Board {
     private int mInputNumber = 0;
     private ArrayList<String> mSequence = new ArrayList<>();
     private ArrayList<Animator> AnimatorArray = new ArrayList<>();
-
-    private AnimatorSet mAnimation;
+    private AnimatorSet mAnimation = new AnimatorSet();
     private boolean playOriginal;
     /* Board()
      * constructor, runs first sequence
@@ -102,11 +103,11 @@ public class Board {
             index--;
         } while (index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
-        if (mScore >= 0) {      //wont work first try since the view isnt created yet
-            mAnimation = new AnimatorSet();
-            mAnimation.playSequentially(AnimatorArray);
-            mAnimation.start();
-        }
+        AnimatorArray.trimToSize();
+        mAnimation = new AnimatorSet();
+        mAnimation.playSequentially(AnimatorArray);
+        mAnimation.start();
+
     }
     /* simonSequence()
      * creates the input sequence that builds on prior iterations
@@ -121,14 +122,15 @@ public class Board {
         mSequence.add(chosenColor);
         AnimatorArray.add(flashButton(getButton(chosenColor)));
         mSequence.trimToSize(); //just in case mSequence gets to big
+        AnimatorArray.trimToSize();
         if(mScore == 1){
             AnimatorArray.set(0, flashButton(getButton(mSequence.get(0))));
         }
-        if (mScore >= 0) {      //wont work first try since the view isnt created yet
-            mAnimation = new AnimatorSet();
-            mAnimation.playSequentially(AnimatorArray);
-            mAnimation.start();
-        }
+        //wont work first try since the view isnt created yet
+        mAnimation = new AnimatorSet();
+        mAnimation.playSequentially(AnimatorArray);
+        mAnimation.start();
+
     }
 
     /* checkInput(color)
@@ -164,8 +166,9 @@ public class Board {
 
     /* reset()
      * Resets game
+     * returns false to make gameOver false
      */
-    public void reset() {
+    public boolean reset() {
         mScore = 0;
         mAnimation.end();
         if(playOriginal){
@@ -174,6 +177,7 @@ public class Board {
             simonSequence();
         }
         else aubieSequence();
+        return false;
     }
 
     /* getSequenceList()
@@ -200,4 +204,54 @@ public class Board {
     public boolean isAnimatorRunning(){
         return mAnimation.isRunning();
     }
+
+    public void playAnimation(){
+        if(!playOriginal && mScore == 0){           //when you choose aubie's game and its the initial run the animation is finicky and needs to be forced to play
+            AnimatorArray.set(0, flashButton(getButton(mSequence.get(0))));
+            mAnimation = new AnimatorSet();
+            mAnimation.playSequentially(AnimatorArray);
+        }
+        mAnimation.end();
+        mAnimation.start();
+    }
+
+    ////////////////////////////////////////////////////////////////
+    //                                                            //
+    //                      parcelable stuff                      //
+    //                                                            //
+    ////////////////////////////////////////////////////////////////
+
+    private Board(Parcel in) {
+        mSequence = in.readArrayList(String.class.getClassLoader());
+        AnimatorArray = in.readArrayList(Animator.class.getClassLoader());
+        mScore = in.readInt();
+        playOriginal = in.readByte() != 0;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeList(mSequence);
+        dest.writeList(AnimatorArray);
+        dest.writeInt(mScore);
+        dest.writeByte((byte) (playOriginal ? 1 : 0));
+    }
+
+    public void MyParcelable() {
+        // Normal actions performed by class, since this is still a normal object!
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Board createFromParcel(Parcel in) {
+            return new Board(in);
+        }
+
+        public Board[] newArray(int size) {
+            return new Board[size];
+        }
+    };
 }
