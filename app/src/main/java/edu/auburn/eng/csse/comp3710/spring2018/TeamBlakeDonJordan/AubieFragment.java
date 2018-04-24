@@ -29,6 +29,7 @@ public class AubieFragment extends Fragment {
     private static final String KEY_BOARD = "Board";
     private int replayCount = 0;
     private View v;
+    private MediaPlayer mediaPlayer;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,8 +127,14 @@ public class AubieFragment extends Fragment {
                    replayCount++;
             }
         });
-
         return v;
+    }
+
+    @Override
+    public void onStop() {
+        //mediaPlayer.release();
+        //mediaPlayer = null;
+        super.onStop();
     }
 
     /* click(color, mScoreBoard)
@@ -136,27 +143,29 @@ public class AubieFragment extends Fragment {
      */
     public void click(String color) {
        if(!mBoard.isAnimatorRunning()) {
-           /*switch (color){
+           switch (color){
                case "red":
-                   MediaPlayer.create(getContext(), R.raw.anote_red).start();
+                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.anote_red);
                    break;
                case "blue":
-                   MediaPlayer.create(getContext(), R.raw.enote_blue).start();
+                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.enote_blue);
                    break;
                case "yellow":
-                   MediaPlayer.create(getContext(), R.raw.csharpnote_yellow).start();
+                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.csharpnote_yellow);
                    break;
                case "green":
-                   MediaPlayer.create(getContext(), R.raw.enote_green).start();
+                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.enote_green);
                    break;
                case "orange":
-                   MediaPlayer.create(getContext(), R.raw.fnote_orange).start();
+                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.fnote_orange);
                    break;
                default:
-           }*/
+           }
+
            if (!mGameOver) {
                mGameOver = mBoard.checkInput(color);
                mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
+               if(!mGameOver) mediaPlayer.start();
            }
            if (mGameOver) {
                mGameOverText.setVisibility(View.VISIBLE);

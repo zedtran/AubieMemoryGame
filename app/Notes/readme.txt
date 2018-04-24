@@ -9,5 +9,4 @@ This readme file contains the following information:
 4. A list of known bugs:
 	after being rotated animations do not play if reset is pressed
 	after being rotated the screen is not updated correctly
-	button animation goes while button press is not being registered
-	sound files are extremly choppy and buggy even tho when played normally they arent 
+

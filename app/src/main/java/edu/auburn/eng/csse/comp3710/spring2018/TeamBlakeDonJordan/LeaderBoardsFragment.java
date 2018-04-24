@@ -51,8 +51,8 @@ public class LeaderBoardsFragment extends Fragment {
     }
 
     @SuppressLint("WrongConstant")
-    /*public void runDatabase() {
-        mDatabase = android.database.sqlite.SQLiteDatabase.openOrCreateDatabase(DATABASE_NAME, SQLiteDatabase.CREATE_IF_NECESSARY, null);
+    public void runDatabase() {
+        mDatabase = mDatabase.openOrCreateDatabase(DATABASE_NAME, null, null);
 
         // SET SOME DATABASE CONFIGURATION INFO
         mDatabase.setLocale(Locale.getDefault()); // Set the locale
@@ -60,7 +60,7 @@ public class LeaderBoardsFragment extends Fragment {
 
         // CREATE TABLE
         mDatabase.execSQL(CREATE_USER_SCORE_TABLE);
-    }*/
+    }
 
     // Add a book to the book table
     public void addUser(User user) {

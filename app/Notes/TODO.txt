@@ -1,3 +1,5 @@
 1) Add preferences for options
 2) Finish sqlite for leaderboards
+3) Add code so sound plays when animation runs 
+
 
