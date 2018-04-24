@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.View;
 import android.widget.Button;
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,20 +40,29 @@ public class Board implements Parcelable {
     private ArrayList<Animator> AnimatorArray = new ArrayList<>();
     private AnimatorSet mAnimation = new AnimatorSet();
     private boolean playOriginal;
+    private View view;
     /* Board()
      * constructor, runs first sequence
      */
-    Board(Button mRedB, Button mBlueB, Button mYellowB, Button mGreenB, Button mOrangeB, boolean playOriginal) {
+    Board(boolean playOriginal, View v) {
         if (playOriginal) simonSequence();
         else aubieSequence();
         this.playOriginal = playOriginal;
-        this.mRedButton = mRedB;
-        this.mBlueButton = mBlueB;
-        this.mYellowButton = mYellowB;
-        this.mGreenButton = mGreenB;
-        this.mOrangeButton = mOrangeB;
+        mRedButton = v.findViewById(R.id.red);
+        mBlueButton = v.findViewById(R.id.blue);
+        mYellowButton = v.findViewById(R.id.yellow);
+        mGreenButton = v.findViewById(R.id.green);
+        mOrangeButton = v.findViewById(R.id.orange);
+        view = v;
     }
 
+    public void updateBoard(){
+        mRedButton = view.findViewById(R.id.red);
+        mBlueButton = view.findViewById(R.id.blue);
+        mYellowButton = view.findViewById(R.id.yellow);
+        mGreenButton = view.findViewById(R.id.green);
+        mOrangeButton = view.findViewById(R.id.orange);
+    }
     /* getScore()
      * returns player score
      */

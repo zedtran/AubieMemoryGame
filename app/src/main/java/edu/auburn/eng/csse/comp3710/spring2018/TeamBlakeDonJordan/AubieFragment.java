@@ -35,6 +35,7 @@ public class AubieFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null){                     //restores mBoard after state destroyed
             mBoard = savedInstanceState.getParcelable(KEY_BOARD);
+            mBoard.updateBoard();
         }
     }
 
@@ -55,9 +56,6 @@ public class AubieFragment extends Fragment {
         if (bundle != null) {
             mPlayOriginal = bundle.getBoolean("PLAY_ORIGINAL");
         }
-
-
-        //creates all buttons
         Button mRedButton = v.findViewById(R.id.red);
         Button mBlueButton = v.findViewById(R.id.blue);
         Button mYellowButton = v.findViewById(R.id.yellow);
@@ -65,8 +63,11 @@ public class AubieFragment extends Fragment {
         Button mOrangeButton = v.findViewById(R.id.orange);
         Button mResetButton =  v.findViewById(R.id.reset);
         Button mReplayButton = v.findViewById(R.id.replay);
+
+        //creates all buttons
+
         if(savedInstanceState == null) {
-            mBoard = new Board(mRedButton, mBlueButton, mYellowButton, mGreenButton, mOrangeButton, mPlayOriginal);
+            mBoard = new Board(mPlayOriginal, v);
         }
         mBoard.flashButton(mBoard.getButton(mBoard.getSequenceList().get(0))).start();  //flash initial animation
         mGameOverText = v.findViewById(R.id.gameover); //assigns  game over text view
