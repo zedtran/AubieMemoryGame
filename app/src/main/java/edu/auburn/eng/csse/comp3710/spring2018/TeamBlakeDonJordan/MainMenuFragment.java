@@ -12,6 +12,8 @@ import android.widget.Button;
  *
  * Launch screen. User picks to either start the app, go to the leaderboards, change options,
  * or look at extras
+ *
+ * Created by Jordan, Don, and Blake on 4/23/2018.
  */
 public class MainMenuFragment extends Fragment{
     @Override

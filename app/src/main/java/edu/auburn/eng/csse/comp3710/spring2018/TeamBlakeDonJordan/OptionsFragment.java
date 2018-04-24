@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 /* Options Fragment
  * Idea for this class is that it will use the preferences persistence type to
  * save player options across the app / extra idea can be scrapped if we run out of time
+ *
+ * Created by Jordan, Don, and Blake on 4/23/2018.
  */
 public class OptionsFragment extends Fragment {
     @Override

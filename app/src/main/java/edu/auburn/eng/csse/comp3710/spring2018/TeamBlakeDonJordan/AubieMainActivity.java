@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 /*
  * Launches main menu fragment
+ *
+ * Created by Jordan, Don, and Blake on 4/12/2018.
  */
 public class AubieMainActivity extends Activity {
 

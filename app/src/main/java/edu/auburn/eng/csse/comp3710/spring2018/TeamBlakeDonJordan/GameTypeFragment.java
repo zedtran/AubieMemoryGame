@@ -10,6 +10,8 @@ import android.widget.Button;
 
 /* Game Type Fragment
  * Players can choose to play Aubie's Rendition of Simon or the original Simon
+ *
+ * Created by Jordan, Don, and Blake on 4/20/2018.
  */
 public class GameTypeFragment extends Fragment {
 

@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 /* Leaderboards Fragment
  *
  * Handles saving and retrieving of player scores
+ *
+ * Created by Jordan, Don, and Blake on 4/23/2018.
  */
 
 public class LeaderBoardsFragment extends Fragment {
