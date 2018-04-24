@@ -40,6 +40,8 @@ public class Board implements Parcelable {
     private ArrayList<Animator> AnimatorArray = new ArrayList<>();
     private AnimatorSet mAnimation = new AnimatorSet();
     private boolean playOriginal;
+    private Random rand = new Random();
+    private String choices[] = {RED, BLUE, YELLOW, GREEN, ORANGE};
     /* Board()
      * constructor, runs first sequence
      */
@@ -102,25 +104,19 @@ public class Board implements Parcelable {
      * input number set to zero at each new sequence
      */
     private void aubieSequence() {
-        String choices[] = {RED, BLUE, YELLOW, GREEN, ORANGE};
         mSequence = new ArrayList<>(mScore + 1);
         mInputNumber = 0;
-        Random rand = new Random();
         AnimatorArray  = new ArrayList<>();
         int index = mScore + 1;
         do //using a do here so when the score is initially zero, beginning of game, it will still loop
         {
             String chosenColor = choices[rand.nextInt(5)];
             mSequence.add(chosenColor);
-            AnimatorArray.add(flashButton(getButton(chosenColor)));
+            AnimatorArray.add(addFlash(getButton(chosenColor)));
             index--;
         } while (index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
-        AnimatorArray.trimToSize();
-        mAnimation = new AnimatorSet();
-        mAnimation.playSequentially(AnimatorArray);
-        mAnimation.start();
-
+        playAnimation();
     }
     /* simonSequence()
      * creates the input sequence that builds on prior iterations
@@ -128,22 +124,12 @@ public class Board implements Parcelable {
      * input number set to zero at each new sequence
      */
     private void simonSequence() {
-        String choices[] = {RED, BLUE, YELLOW, GREEN, ORANGE};
         mInputNumber = 0;
-        Random rand = new Random();
         String chosenColor = choices[rand.nextInt(5)];
         mSequence.add(chosenColor);
-        AnimatorArray.add(flashButton(getButton(chosenColor)));
+        AnimatorArray.add(addFlash(getButton(chosenColor)));
         mSequence.trimToSize(); //just in case mSequence gets to big
-        AnimatorArray.trimToSize();
-        if(mScore == 1){
-            AnimatorArray.set(0, flashButton(getButton(mSequence.get(0))));
-        }
-        //wont work first try since the view isnt created yet
-        mAnimation = new AnimatorSet();
-        mAnimation.playSequentially(AnimatorArray);
-        mAnimation.start();
-
+        playAnimation();
     }
 
     /* checkInput(color)
@@ -168,13 +154,28 @@ public class Board implements Parcelable {
         }
     }
 
-    /* getSequence()
-     * Returns expected sequence of colors
+    /* addFlash(mButton)
+     * adds animator to the button to be flashed
      */
-    public String getSequenceString() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < mSequence.size(); i++) builder.append(mSequence.get(i) + " ");
-        return builder.toString();
+    public Animator addFlash(Button mButton) {
+        ObjectAnimator anim = ObjectAnimator.ofFloat(mButton, "alpha", 1, 0);   //sets so the opacity of the object goes from 100% to 0%
+        anim.setDuration(500);                          //time it takes to run the animator, so 500 milliseconds
+        anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
+        anim.setRepeatCount(1);                         //repeats only once
+        return anim;
+    }
+    /* playAnimation
+     * Sets up the animator list to be played
+     */
+    public void playAnimation(){
+        AnimatorArray.trimToSize();
+        if((!playOriginal && mScore == 0) || (playOriginal && mScore == 1)){           //when you choose aubie's game and its the initial run the animation is finicky and needs to be forced to play
+            AnimatorArray.set(0, addFlash(getButton(mSequence.get(0))));
+        }
+        mAnimation = new AnimatorSet();
+        mAnimation.playSequentially(AnimatorArray);
+        mAnimation.end();
+        mAnimation.start();
     }
 
     /* reset()
@@ -193,6 +194,23 @@ public class Board implements Parcelable {
         return false;
     }
 
+    /* resetInputCount()
+     *
+     * used for replay button, resets input so that the user can re-try the input
+     */
+    public void resetInputCount(){
+        mInputNumber = 0;
+    }
+
+    /* getSequence()
+     * Returns expected sequence of colors
+     */
+    public String getSequenceString() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < mSequence.size(); i++) builder.append(mSequence.get(i) + " ");
+        return builder.toString();
+    }
+
     /* getSequenceList()
      * returns list of sequence objects
      * may not be needed
@@ -201,16 +219,6 @@ public class Board implements Parcelable {
         return mSequence;
     }
 
-    /* flashButton(mButton)
-     * adds animator to the button to be flashed
-     */
-    public Animator flashButton(Button mButton) {
-        ObjectAnimator anim = ObjectAnimator.ofFloat(mButton, "alpha", 1, 0);   //sets so the opacity of the object goes from 100% to 0%
-        anim.setDuration(500);                          //time it takes to run the animator, so 500 milliseconds
-        anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
-        anim.setRepeatCount(1);                         //repeats only once
-        return anim;
-    }
     /* isAnimatorRunning()
      * returns true/false if animator is running
      */
@@ -218,14 +226,24 @@ public class Board implements Parcelable {
         return mAnimation.isRunning();
     }
 
-    public void playAnimation(){
-        if(!playOriginal && mScore == 0){           //when you choose aubie's game and its the initial run the animation is finicky and needs to be forced to play
-            AnimatorArray.set(0, flashButton(getButton(mSequence.get(0))));
-            mAnimation = new AnimatorSet();
-            mAnimation.playSequentially(AnimatorArray);
-        }
-        mAnimation.end();
-        mAnimation.start();
+    public Button getRedButton() {
+        return mRedButton;
+    }
+
+    public Button getBlueButton() {
+        return mBlueButton;
+    }
+
+    public Button getYellowButton() {
+        return mYellowButton;
+    }
+
+    public Button getOrangeButton() {
+        return mOrangeButton;
+    }
+
+    public Button getGreenButton() {
+        return mGreenButton;
     }
 
     ////////////////////////////////////////////////////////////////
@@ -252,10 +270,6 @@ public class Board implements Parcelable {
         dest.writeList(AnimatorArray);
         dest.writeInt(mScore);
         dest.writeByte((byte) (playOriginal ? 1 : 0));
-    }
-
-    public void MyParcelable() {
-        // Normal actions performed by class, since this is still a normal object!
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

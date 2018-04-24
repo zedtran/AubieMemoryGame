@@ -7,6 +7,6 @@ This readme file contains the following information:
 3. Special instructions needed to build the app (if none, please indicate "none").
 
 4. A list of known bugs:
-	after being rotated animations do not play if reset is pressed
-	after being rotated the screen is not updated correctly
+	- sound still buggy and choppy
+	- sound still stops after pressing buttons alot of times
 

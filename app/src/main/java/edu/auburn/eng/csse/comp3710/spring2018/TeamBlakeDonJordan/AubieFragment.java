@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Formatter;
+import java.util.Locale;
+
 /**
  * AubieFragment
  * main fragment of the app. Runs most of the code here. Essentially causes the game to work
@@ -48,65 +51,57 @@ public class AubieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_aubieboard, container, false);
+
+        //creates all views
         mScoreBoard = v.findViewById(R.id.score);
         Bundle bundle = getArguments();
-
-
-        boolean mPlayOriginal = true;
-        if (bundle != null) {
-            mPlayOriginal = bundle.getBoolean("PLAY_ORIGINAL");
-        }
-        if (savedInstanceState != null) mBoard.updateBoard(v);
-        Button mRedButton = v.findViewById(R.id.red);
-        Button mBlueButton = v.findViewById(R.id.blue);
-        Button mYellowButton = v.findViewById(R.id.yellow);
-        Button mGreenButton = v.findViewById(R.id.green);
-        Button mOrangeButton = v.findViewById(R.id.orange);
         Button mResetButton =  v.findViewById(R.id.reset);
         Button mReplayButton = v.findViewById(R.id.replay);
-
-        //creates all buttons
-
-        if(savedInstanceState == null) {
-            mBoard = new Board(mPlayOriginal, v);
-        }
-        mBoard.flashButton(mBoard.getButton(mBoard.getSequenceList().get(0))).start();  //flash initial animation
-        mGameOverText = v.findViewById(R.id.gameover); //assigns  game over text view
         TextView gameType = v.findViewById(R.id.gameType);
-        if(mPlayOriginal)  gameType.setText("Simon Memory Game");
+        mGameOverText = v.findViewById(R.id.gameover); //assigns  game over text view
+        boolean mPlayOriginal = true;
+
+
+        if (bundle != null) mPlayOriginal = bundle.getBoolean("PLAY_ORIGINAL"); //sets play original value
+
+        if(mPlayOriginal)  gameType.setText("Simon Memory Game");   //decided to play simon or aubie game
         else  gameType.setText("Aubie's Memory Game");
-        mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
+
+        if(savedInstanceState == null) mBoard = new Board(mPlayOriginal, v);
+        else  mBoard.updateBoard(v);
+
+        mBoard.addFlash(mBoard.getButton(mBoard.getSequenceList().get(0))).start();  //flash initial animation
 
         //sets up listeners for buttons
-        mRedButton.setOnClickListener(new View.OnClickListener() {
+        mBoard.getRedButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                               //Red
                 //mRedButton.clearAnimation();
                 click(getString(R.string.RED));
             }
         });
-        mBlueButton.setOnClickListener(new View.OnClickListener() {
+        mBoard.getBlueButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                              //Blue
                 //mBlueButton.clearAnimation();
                 click(getString(R.string.BLUE));
             }
         });
-        mYellowButton.setOnClickListener(new View.OnClickListener() {
+        mBoard.getYellowButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                            //Yellow
                 //mYellowButton.clearAnimation();
                 click(getString(R.string.YELLOW));
             }
         });
-        mGreenButton.setOnClickListener(new View.OnClickListener() {
+        mBoard.getGreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                             //Green
                 //mGreenButton.clearAnimation();
                 click(getString(R.string.GREEN));
             }
         });
-        mOrangeButton.setOnClickListener(new View.OnClickListener() {
+        mBoard.getOrangeButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                            //Orange
                 //mOrangeButton.clearAnimation();
@@ -118,25 +113,19 @@ public class AubieFragment extends Fragment {
             public void onClick(View view) {                                        //Reset
                 v.findViewById(R.id.board).setVisibility(View.VISIBLE);
                 mGameOver = mBoard.reset(); //sets gameOver to false
-                mGameOverText.setVisibility(View.INVISIBLE);
-                mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
+                v.findViewById(R.id.gameOverScreen).setVisibility(View.INVISIBLE);  //hides game over screen
+                v.findViewById(R.id.replay).setVisibility(View.VISIBLE);        //sets replay to visible
             }
         });
         mReplayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {                                        //Replay
                    mBoard.playAnimation();
+                   mBoard.resetInputCount();
                    replayCount++;
             }
         });
         return v;
-    }
-
-    @Override
-    public void onStop() {
-        //mediaPlayer.release();
-        //mediaPlayer = null;
-        super.onStop();
     }
 
     /* click(color, mScoreBoard)
@@ -163,16 +152,36 @@ public class AubieFragment extends Fragment {
                    break;
                default:
            }
-
            if (!mGameOver) {
                mGameOver = mBoard.checkInput(color);
-               mScoreBoard.setText(getString(R.string.score, Integer.toString(mBoard.getScore())));
                if(!mGameOver) mediaPlayer.start();
            }
            if (mGameOver) {
-               mGameOverText.setVisibility(View.VISIBLE);
-               v.findViewById(R.id.board).setVisibility(View.INVISIBLE);
+               v.findViewById(R.id.gameOverScreen).setVisibility(View.VISIBLE); //sets game over screen to visible
+               v.findViewById(R.id.board).setVisibility(View.INVISIBLE);        //sets board to invisible
+               v.findViewById(R.id.replay).setVisibility(View.INVISIBLE);       //sets replay to invisible
+               mScoreBoard.setText(setScore());
            }
        }
+    }
+
+    public String setScore(){
+        int longestSequence = mBoard.getScore();
+        String difficulty = "normal";
+        int difficultyMultiplier = 1;
+        switch (difficulty){
+            case "normal":
+                difficultyMultiplier = 2;
+            default:
+                difficultyMultiplier = 1;
+        }
+        int finalScore = (longestSequence - replayCount) * difficultyMultiplier;
+        StringBuilder builder = new StringBuilder();
+        Formatter formatter = new Formatter(builder, Locale.US);
+        formatter.format("Final Score: %1$2d" +
+                "\nLongest Sequence: %2$2d" +
+                "\nNum of Replays: %3$2d" +
+                "\nDifficulty: %4$s",finalScore, longestSequence, replayCount, difficulty);
+        return formatter.toString();
     }
 }

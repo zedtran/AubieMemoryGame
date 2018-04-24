@@ -1,5 +1,14 @@
 1) Add preferences for options
 2) Finish sqlite for leaderboards
-3) Add code so sound plays when animation runs 
+3) Add code so sound plays when animation runs
+4) Add in splash screen which contains (required by Umphress)
+    - app logo
+    - app name
+    - our names
+    - Auburn University COMP3710 Spring 2018
+5) Clean up the UI a bit
+    - Main menu title could be nicer
+    - as could be the game type menu
+        i) we could put the game type on the main menu to remove that fragment but its not that important
 
 
