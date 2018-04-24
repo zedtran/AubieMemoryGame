@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
+ * AubieFragment
+ * main fragment of the app. Runs most of the code here. Essentially causes the game to work
+ *
  * Created by Jordan, Don, and Blake on 4/12/2018.
  */
 

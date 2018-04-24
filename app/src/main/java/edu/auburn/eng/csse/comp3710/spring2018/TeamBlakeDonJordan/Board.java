@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
+ * Board class
+ *
+ * Contain all the logic for the game
+ *
  * Created by Jordan, Don, and Blake on 4/12/2018.
  */
 

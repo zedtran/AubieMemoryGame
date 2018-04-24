@@ -9,6 +9,9 @@
     <string name="BLUE">blue</string>
     <string name="AUBIE"> Play Aubie\'s Memory Game </string>
     <string name="SIMON"> Play Simon </string>
-
+    <string name="OPTIONS"> Options </string>
+    <string name="PLAY"> Play Game </string>
+    <string name="gameTitle">Aubie\'s Memory Game</string>
+    <string name="extra">Extras</string>
 
 </resources>

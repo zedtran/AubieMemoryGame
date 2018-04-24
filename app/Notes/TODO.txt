@@ -1,6 +1,3 @@
-1) Add Splash Screen Activity
-2) Add Splash Screen Layout
-3) Add Leaderboard Activity
-4) Add Leaderboard Layout
-5) Add Read/Write Save File Ability
-9) Add in screen rotation contingency 
+1) Add preferences for options
+2) Finish sqlite for leaderboards
+
