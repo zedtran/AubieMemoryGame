@@ -40,7 +40,6 @@ public class Board implements Parcelable {
     private ArrayList<Animator> AnimatorArray = new ArrayList<>();
     private AnimatorSet mAnimation = new AnimatorSet();
     private boolean playOriginal;
-    private View view;
     /* Board()
      * constructor, runs first sequence
      */
@@ -53,15 +52,15 @@ public class Board implements Parcelable {
         mYellowButton = v.findViewById(R.id.yellow);
         mGreenButton = v.findViewById(R.id.green);
         mOrangeButton = v.findViewById(R.id.orange);
-        view = v;
+
     }
 
-    public void updateBoard(){
-        mRedButton = view.findViewById(R.id.red);
-        mBlueButton = view.findViewById(R.id.blue);
-        mYellowButton = view.findViewById(R.id.yellow);
-        mGreenButton = view.findViewById(R.id.green);
-        mOrangeButton = view.findViewById(R.id.orange);
+    public void updateBoard(View v){
+        mRedButton = v.findViewById(R.id.red);
+        mBlueButton = v.findViewById(R.id.blue);
+        mYellowButton = v.findViewById(R.id.yellow);
+        mGreenButton = v.findViewById(R.id.green);
+        mOrangeButton = v.findViewById(R.id.orange);
     }
     /* getScore()
      * returns player score

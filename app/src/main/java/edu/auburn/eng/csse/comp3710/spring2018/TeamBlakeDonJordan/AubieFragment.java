@@ -35,7 +35,7 @@ public class AubieFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null){                     //restores mBoard after state destroyed
             mBoard = savedInstanceState.getParcelable(KEY_BOARD);
-            mBoard.updateBoard();
+
         }
     }
 
@@ -56,6 +56,7 @@ public class AubieFragment extends Fragment {
         if (bundle != null) {
             mPlayOriginal = bundle.getBoolean("PLAY_ORIGINAL");
         }
+        if (savedInstanceState != null) mBoard.updateBoard(v);
         Button mRedButton = v.findViewById(R.id.red);
         Button mBlueButton = v.findViewById(R.id.blue);
         Button mYellowButton = v.findViewById(R.id.yellow);
