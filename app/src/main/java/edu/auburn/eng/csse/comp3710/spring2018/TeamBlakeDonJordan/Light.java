@@ -8,25 +8,20 @@ import android.media.SoundPool;
 import android.view.View;
 import android.widget.Button;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Light {
-    Button mButton;
-    SoundPool mSound = new SoundPool.Builder().build();
-    String mColor;
-    Animator mAnimation;
-    int mDifficultyModifier;
+    private Button mButton;
+    private SoundPool mSound = new SoundPool.Builder().build();
+    private String mColor;
+    private int mDifficultyModifier;
 
     Light(Button mButton, int mSound, String mColor, Context context, int mDifficultyModifier){
         this.mButton = mButton;
         this.mColor = mColor;
         this.mSound.load(context, mSound, 1);
         this.mDifficultyModifier = mDifficultyModifier;
-
-        ObjectAnimator anim = ObjectAnimator.ofFloat(mButton, "alpha", 1, 0);   //sets so the opacity of the object goes from 100% to 0%
-        anim.setDuration(500 / mDifficultyModifier);                          //time it takes to run the animator, so 500 milliseconds / difficulty modifier
-        anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
-        anim.setRepeatCount(1);                         //repeats only once
-        mAnimation = anim;
-
     }
     public Button getButton() {
         return mButton;
@@ -40,10 +35,14 @@ public class Light {
         return mColor;
     }
 
-    public Animator getAnimation() {
-        return mAnimation;
-    }
 
+    public Animator addAnimation(){
+        ObjectAnimator anim = ObjectAnimator.ofFloat(mButton, "alpha", 1, 0);   //sets so the opacity of the object goes from 100% to 0%
+        anim.setDuration(500 / mDifficultyModifier);                          //time it takes to run the animator, so 500 milliseconds / difficulty modifier
+        anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
+        anim.setRepeatCount(1);                         //repeats only once
+        return anim;
+    }
     public void updateBoard(View v)
     {
         switch (mColor){
@@ -66,4 +65,5 @@ public class Light {
                 break;
         }
     }
+
 }

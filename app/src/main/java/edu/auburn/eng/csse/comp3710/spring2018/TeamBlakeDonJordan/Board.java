@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class Board implements Parcelable {
 
     private boolean playOriginal;
 
-    private Random rand = new Random();
+    private Random rand;
     private String choices[] = {RED, BLUE, YELLOW, GREEN, ORANGE};
 
     private int mDifficultyModifier = 1;
@@ -139,11 +140,12 @@ public class Board implements Parcelable {
         mInputNumber = 0;
         AnimatorArray  = new ArrayList<>();
         int index = mScore + 1;
+        rand = new Random();
         do //using a do here so when the score is initially zero, beginning of game, it will still loop
         {
             String chosenColor = choices[rand.nextInt(5)];
             mSequence.add(chosenColor);
-            AnimatorArray.add((getLight(chosenColor).getAnimation()));
+            AnimatorArray.add((getLight(chosenColor).addAnimation()));
             index--;
         } while (index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
@@ -156,11 +158,13 @@ public class Board implements Parcelable {
      */
     private void simonSequence() {
         mInputNumber = 0;
+        rand = new Random();
         String chosenColor = choices[rand.nextInt(5)];
         mSequence.add(chosenColor);
-        AnimatorArray.add((getLight(chosenColor).getAnimation()));
+        AnimatorArray.add((getLight(chosenColor).addAnimation()));
         mSequence.trimToSize(); //just in case mSequence gets to big
         playAnimation();
+        Log.i("debug", getSequenceString());
     }
 
     /* checkInput(color)
@@ -188,7 +192,7 @@ public class Board implements Parcelable {
     public void playAnimation(){
         AnimatorArray.trimToSize();
         if((!playOriginal && mScore == 0) || (playOriginal && mScore == 1)){           //when you choose aubie's game and its the initial run the animation is finicky and needs to be forced to play
-            AnimatorArray.set(0, (getLight(mSequence.get(0)).getAnimation()));
+            AnimatorArray.set(0, (getLight(mSequence.get(0)).addAnimation()));
         }
         mAnimation = new AnimatorSet();
         mAnimation.playSequentially(AnimatorArray);

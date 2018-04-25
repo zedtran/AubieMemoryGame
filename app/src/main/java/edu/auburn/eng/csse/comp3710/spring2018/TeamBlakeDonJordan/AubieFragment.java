@@ -72,7 +72,7 @@ public class AubieFragment extends Fragment {
         }
         else  mBoard.updateBoard(v);
 
-        mBoard.getLight(mBoard.getSequenceList().get(0)).getAnimation().start();  //flash initial animation
+        mBoard.getLight(mBoard.getSequenceList().get(0)).addAnimation().start();  //flash initial animation
 
 
 
@@ -147,7 +147,7 @@ public class AubieFragment extends Fragment {
         if(!mBoard.isAnimatorRunning()) {
             if (!mGameOver) {
                 mGameOver = mBoard.checkInput(color);
-                //if (!mGameOver) sp.play(sound, 1, 1, 0, 0, 1);
+                if (!mGameOver) sp.play(sound, 1, 1, 0, 0, 1);
             }
             if (mGameOver) {
                 v.findViewById(R.id.gameOverScreen).setVisibility(View.VISIBLE); //sets game over screen to visible
