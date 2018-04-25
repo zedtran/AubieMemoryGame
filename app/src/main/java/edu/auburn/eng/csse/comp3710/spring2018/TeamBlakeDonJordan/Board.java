@@ -27,7 +27,6 @@ public class Board implements Parcelable {
     private static final String GREEN = "green";
     private static final String ORANGE = "orange";
 
-
     private Button mRedButton;
     private Button mBlueButton;
     private Button mYellowButton;
@@ -36,16 +35,25 @@ public class Board implements Parcelable {
 
     private int mScore = 0;
     private int mInputNumber = 0;
+
     private ArrayList<String> mSequence = new ArrayList<>();
     private ArrayList<Animator> AnimatorArray = new ArrayList<>();
     private AnimatorSet mAnimation = new AnimatorSet();
+
     private boolean playOriginal;
+
     private Random rand = new Random();
     private String choices[] = {RED, BLUE, YELLOW, GREEN, ORANGE};
+
+    private int mDifficultyModifier = 1;
+    private String mDifficulty;
+
     /* Board()
      * constructor, runs first sequence
+     * sets button to their respective views
+     * sets difficulty string and its modifier
      */
-    Board(boolean playOriginal, View v) {
+    Board(boolean playOriginal, View v, String difficultyIn) {
         if (playOriginal) simonSequence();
         else aubieSequence();
         this.playOriginal = playOriginal;
@@ -54,7 +62,23 @@ public class Board implements Parcelable {
         mYellowButton = v.findViewById(R.id.yellow);
         mGreenButton = v.findViewById(R.id.green);
         mOrangeButton = v.findViewById(R.id.orange);
+        mDifficulty = difficultyIn;
+        switch (mDifficulty.toLowerCase()){
+            case("easy"):
+                mDifficultyModifier = 1;
+                break;
+            case("normal"):
+                mDifficultyModifier = 2;
+                break;
+            case("hard"):
+                mDifficultyModifier = 5;
+                break;
+            case("extreme"):
+                mDifficultyModifier = 10;
+                break;
 
+            default:
+        }
     }
 
     public void updateBoard(View v){
@@ -159,7 +183,7 @@ public class Board implements Parcelable {
      */
     public Animator addFlash(Button mButton) {
         ObjectAnimator anim = ObjectAnimator.ofFloat(mButton, "alpha", 1, 0);   //sets so the opacity of the object goes from 100% to 0%
-        anim.setDuration(500);                          //time it takes to run the animator, so 500 milliseconds
+        anim.setDuration(500 / mDifficultyModifier);                          //time it takes to run the animator, so 500 milliseconds / difficulty modifier
         anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
         anim.setRepeatCount(1);                         //repeats only once
         return anim;
@@ -244,6 +268,14 @@ public class Board implements Parcelable {
 
     public Button getGreenButton() {
         return mGreenButton;
+    }
+
+    public String getDifficulty() {
+        return mDifficulty;
+    }
+
+    public int getDifficultyModifier() {
+        return mDifficultyModifier;
     }
 
     ////////////////////////////////////////////////////////////////

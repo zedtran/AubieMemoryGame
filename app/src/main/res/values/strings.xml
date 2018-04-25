@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Aubie_Memory</string>
-    <string name="score">Final Score: %1$s\n\n\n\n</string>
     <string name="gameOver">GAME OVER</string>
     <string name="GREEN">green</string>
     <string name="ORANGE">orange</string>
@@ -11,7 +10,9 @@
     <string name="SIMON"> Play Simon </string>
     <string name="OPTIONS"> Options </string>
     <string name="PLAY"> Play Game </string>
-    <string name="gameTitle">Aubie\'s Memory Game</string>
+    <string name="aubieTitle">Aubie\'s Memory Game</string>
+    <string name="simonTitle">Simon\'s Memory Game</string>
     <string name="extra">Extras</string>
-
+    <string name="replay">Replay</string>
+    <string name="reset">Reset</string>
 </resources>

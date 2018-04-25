@@ -24,8 +24,6 @@ import java.util.Locale;
 
 public class AubieFragment extends Fragment {
 
-
-    private TextView mGameOverText;
     private Board mBoard;
     private boolean mGameOver = false;
     private TextView mScoreBoard;
@@ -58,16 +56,18 @@ public class AubieFragment extends Fragment {
         Button mResetButton =  v.findViewById(R.id.reset);
         Button mReplayButton = v.findViewById(R.id.replay);
         TextView gameType = v.findViewById(R.id.gameType);
-        mGameOverText = v.findViewById(R.id.gameover); //assigns  game over text view
+
         boolean mPlayOriginal = true;
 
 
         if (bundle != null) mPlayOriginal = bundle.getBoolean("PLAY_ORIGINAL"); //sets play original value
 
-        if(mPlayOriginal)  gameType.setText("Simon Memory Game");   //decided to play simon or aubie game
-        else  gameType.setText("Aubie's Memory Game");
+        if(mPlayOriginal)  gameType.setText(getString(R.string.simonTitle));   //decided to play simon or aubie game
+        else  gameType.setText(getString(R.string.aubieTitle));
 
-        if(savedInstanceState == null) mBoard = new Board(mPlayOriginal, v);
+        if(savedInstanceState == null){
+            mBoard = new Board(mPlayOriginal, v, "Normal"); //difficulty will be chosen through preferences Easy/Normal/Hard/Extreme
+        }
         else  mBoard.updateBoard(v);
 
         mBoard.addFlash(mBoard.getButton(mBoard.getSequenceList().get(0))).start();  //flash initial animation
@@ -167,21 +167,14 @@ public class AubieFragment extends Fragment {
 
     public String setScore(){
         int longestSequence = mBoard.getScore();
-        String difficulty = "normal";
-        int difficultyMultiplier = 1;
-        switch (difficulty){
-            case "normal":
-                difficultyMultiplier = 2;
-            default:
-                difficultyMultiplier = 1;
-        }
-        int finalScore = (longestSequence - replayCount) * difficultyMultiplier;
+
+        int finalScore = (longestSequence - replayCount) * mBoard.getDifficultyModifier();
         StringBuilder builder = new StringBuilder();
         Formatter formatter = new Formatter(builder, Locale.US);
         formatter.format("Final Score: %1$2d" +
                 "\nLongest Sequence: %2$2d" +
-                "\nNum of Replays: %3$2d" +
-                "\nDifficulty: %4$s",finalScore, longestSequence, replayCount, difficulty);
+                "\nNumber of Replays: %3$2d" +
+                "\nDifficulty: %4$s",finalScore, longestSequence, replayCount, mBoard.getDifficulty());
         return formatter.toString();
     }
 }
