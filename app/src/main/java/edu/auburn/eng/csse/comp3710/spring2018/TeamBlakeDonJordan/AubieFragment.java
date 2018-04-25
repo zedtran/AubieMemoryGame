@@ -68,11 +68,11 @@ public class AubieFragment extends Fragment {
         else  gameType.setText(getString(R.string.aubieTitle));
 
         if(savedInstanceState == null){
-            mBoard = new Board(mPlayOriginal, v, "Normal"); //difficulty will be chosen through preferences Easy/Normal/Hard/Extreme
+            mBoard = new Board(mPlayOriginal, v, "Normal", getContext()); //difficulty will be chosen through preferences Easy/Normal/Hard/Extreme
         }
         else  mBoard.updateBoard(v);
 
-        mBoard.addFlash(mBoard.getButton(mBoard.getSequenceList().get(0))).start();  //flash initial animation
+        mBoard.getLight(mBoard.getSequenceList().get(0)).getAnimation().start();  //flash initial animation
 
 
 
@@ -84,38 +84,38 @@ public class AubieFragment extends Fragment {
         final int orangeSound = sp.load(getContext(), R.raw.fnote_orange, 1); // in 2nd param u have to pass your desire ringtone
 
         //sets up listeners for buttons
-        mBoard.getRedButton().setOnClickListener(new View.OnClickListener() {
+        mBoard.getRedLight().getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                               //Red
-                //mRedButton.clearAnimation();
+                //mRedLight.clearAnimation();
                 click(getString(R.string.RED), redSound);
             }
         });
-        mBoard.getBlueButton().setOnClickListener(new View.OnClickListener() {
+        mBoard.getBlueLight().getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                              //Blue
-                //mBlueButton.clearAnimation();
+                //mBlueLight.clearAnimation();
                 click(getString(R.string.BLUE), blueSound);
             }
         });
-        mBoard.getYellowButton().setOnClickListener(new View.OnClickListener() {
+        mBoard.getYellowLight().getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                            //Yellow
-                //mYellowButton.clearAnimation();
+                //mYellowLight.clearAnimation();
                 click(getString(R.string.YELLOW), yellowSound);
             }
         });
-        mBoard.getGreenButton().setOnClickListener(new View.OnClickListener() {
+        mBoard.getGreenLight().getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                             //Green
-                //mGreenButton.clearAnimation();
+                //mGreenLight.clearAnimation();
                 click(getString(R.string.GREEN), greenSound);
             }
         });
-        mBoard.getOrangeButton().setOnClickListener(new View.OnClickListener() {
+        mBoard.getOrangeLight().getButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                            //Orange
-                //mOrangeButton.clearAnimation();
+                //mOrangeLight.clearAnimation();
                 click(getString(R.string.ORANGE), orangeSound);
             }
         });
@@ -147,7 +147,7 @@ public class AubieFragment extends Fragment {
         if(!mBoard.isAnimatorRunning()) {
             if (!mGameOver) {
                 mGameOver = mBoard.checkInput(color);
-                if (!mGameOver) sp.play(sound, 1, 1, 0, 0, 1);
+                //if (!mGameOver) sp.play(sound, 1, 1, 0, 0, 1);
             }
             if (mGameOver) {
                 v.findViewById(R.id.gameOverScreen).setVisibility(View.VISIBLE); //sets game over screen to visible

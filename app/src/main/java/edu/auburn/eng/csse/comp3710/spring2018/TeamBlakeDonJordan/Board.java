@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
@@ -27,11 +28,12 @@ public class Board implements Parcelable {
     private static final String GREEN = "green";
     private static final String ORANGE = "orange";
 
-    private Button mRedButton;
-    private Button mBlueButton;
-    private Button mYellowButton;
-    private Button mGreenButton;
-    private Button mOrangeButton;
+    private Light mRedLight;
+    private Light mBlueLight;
+    private Light mYellowLight;
+    private Light mGreenLight;
+    private Light mOrangeLight;
+    private Light mLights[];
 
     private int mScore = 0;
     private int mInputNumber = 0;
@@ -53,16 +55,13 @@ public class Board implements Parcelable {
      * sets button to their respective views
      * sets difficulty string and its modifier
      */
-    Board(boolean playOriginal, View v, String difficultyIn) {
-        if (playOriginal) simonSequence();
-        else aubieSequence();
-        this.playOriginal = playOriginal;
-        mRedButton = v.findViewById(R.id.red);
-        mBlueButton = v.findViewById(R.id.blue);
-        mYellowButton = v.findViewById(R.id.yellow);
-        mGreenButton = v.findViewById(R.id.green);
-        mOrangeButton = v.findViewById(R.id.orange);
-        mDifficulty = difficultyIn;
+    Board(boolean playOriginal, View v, String mDifficulty, Context context) {
+        Button mRedButton = (Button) v.findViewById(R.id.red);
+        Button mBlueButton = (Button) v.findViewById(R.id.blue);
+        Button mYellowButton = (Button) v.findViewById(R.id.yellow);
+        Button mGreenButton = (Button) v.findViewById(R.id.green);
+        Button mOrangeButton = (Button) v.findViewById(R.id.orange);
+        this.mDifficulty = mDifficulty;
         switch (mDifficulty.toLowerCase()){
             case("easy"):
                 mDifficultyModifier = 1;
@@ -76,17 +75,25 @@ public class Board implements Parcelable {
             case("extreme"):
                 mDifficultyModifier = 10;
                 break;
-
             default:
         }
+
+        mRedLight = new Light(mRedButton, R.raw.anote_red, RED, context, mDifficultyModifier);
+        mBlueLight = new Light(mBlueButton, R.raw.enote_green, BLUE, context, mDifficultyModifier);
+        mYellowLight = new Light(mYellowButton, R.raw.csharpnote_yellow, YELLOW, context, mDifficultyModifier);
+        mGreenLight = new Light(mGreenButton, R.raw.enote_green, GREEN, context, mDifficultyModifier);
+        mOrangeLight = new Light(mOrangeButton, R.raw.fnote_orange, ORANGE, context, mDifficultyModifier);
+        mLights = new Light[]{mRedLight, mBlueLight, mYellowLight, mGreenLight, mOrangeLight};
+        if (playOriginal) simonSequence();
+        else aubieSequence();
+        this.playOriginal = playOriginal;
+
     }
 
     public void updateBoard(View v){
-        mRedButton = v.findViewById(R.id.red);
-        mBlueButton = v.findViewById(R.id.blue);
-        mYellowButton = v.findViewById(R.id.yellow);
-        mGreenButton = v.findViewById(R.id.green);
-        mOrangeButton = v.findViewById(R.id.orange);
+        for(Light l : mLights){
+            l.updateBoard(v);
+        }
     }
     /* getScore()
      * returns player score
@@ -105,18 +112,18 @@ public class Board implements Parcelable {
     /* getButton(color)
      * returns gets button object
      */
-    public Button getButton(String color) {
+    public Light getLight(String color) {
         switch (color) {
             case RED:
-                return mRedButton;
+                return mRedLight;
             case BLUE:
-                return mBlueButton;
+                return mBlueLight;
             case YELLOW:
-                return mYellowButton;
+                return mYellowLight;
             case GREEN:
-                return mGreenButton;
+                return mGreenLight;
             case ORANGE:
-                return mOrangeButton;
+                return mOrangeLight;
             default:
                 return null;    //shouldn't happen
         }
@@ -136,7 +143,7 @@ public class Board implements Parcelable {
         {
             String chosenColor = choices[rand.nextInt(5)];
             mSequence.add(chosenColor);
-            AnimatorArray.add(addFlash(getButton(chosenColor)));
+            AnimatorArray.add((getLight(chosenColor).getAnimation()));
             index--;
         } while (index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
@@ -151,7 +158,7 @@ public class Board implements Parcelable {
         mInputNumber = 0;
         String chosenColor = choices[rand.nextInt(5)];
         mSequence.add(chosenColor);
-        AnimatorArray.add(addFlash(getButton(chosenColor)));
+        AnimatorArray.add((getLight(chosenColor).getAnimation()));
         mSequence.trimToSize(); //just in case mSequence gets to big
         playAnimation();
     }
@@ -177,24 +184,11 @@ public class Board implements Parcelable {
             return true;
         }
     }
-
-    /* addFlash(mButton)
-     * adds animator to the button to be flashed
-     */
-    public Animator addFlash(Button mButton) {
-        ObjectAnimator anim = ObjectAnimator.ofFloat(mButton, "alpha", 1, 0);   //sets so the opacity of the object goes from 100% to 0%
-        anim.setDuration(500 / mDifficultyModifier);                          //time it takes to run the animator, so 500 milliseconds / difficulty modifier
-        anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
-        anim.setRepeatCount(1);                         //repeats only once
-        return anim;
-    }
-    /* playAnimation
-     * Sets up the animator list to be played
-     */
+    
     public void playAnimation(){
         AnimatorArray.trimToSize();
         if((!playOriginal && mScore == 0) || (playOriginal && mScore == 1)){           //when you choose aubie's game and its the initial run the animation is finicky and needs to be forced to play
-            AnimatorArray.set(0, addFlash(getButton(mSequence.get(0))));
+            AnimatorArray.set(0, (getLight(mSequence.get(0)).getAnimation()));
         }
         mAnimation = new AnimatorSet();
         mAnimation.playSequentially(AnimatorArray);
@@ -250,24 +244,24 @@ public class Board implements Parcelable {
         return mAnimation.isRunning();
     }
 
-    public Button getRedButton() {
-        return mRedButton;
+    public Light getRedLight() {
+        return mRedLight;
     }
 
-    public Button getBlueButton() {
-        return mBlueButton;
+    public Light getBlueLight() {
+        return mBlueLight;
     }
 
-    public Button getYellowButton() {
-        return mYellowButton;
+    public Light getYellowLight() {
+        return mYellowLight;
     }
 
-    public Button getOrangeButton() {
-        return mOrangeButton;
+    public Light getOrangeLight() {
+        return mOrangeLight;
     }
 
-    public Button getGreenButton() {
-        return mGreenButton;
+    public Light getGreenLight() {
+        return mGreenLight;
     }
 
     public String getDifficulty() {
