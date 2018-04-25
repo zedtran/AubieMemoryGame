@@ -3,7 +3,9 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
 
 import android.app.Fragment;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -30,7 +32,7 @@ public class AubieFragment extends Fragment {
     private static final String KEY_BOARD = "Board";
     private int replayCount = 0;
     private View v;
-    private MediaPlayer mediaPlayer;
+    private SoundPool sp = new SoundPool.Builder().build(); //(5, AudioManager.STREAM_MUSIC, 0);
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,40 +74,49 @@ public class AubieFragment extends Fragment {
 
         mBoard.addFlash(mBoard.getButton(mBoard.getSequenceList().get(0))).start();  //flash initial animation
 
+
+
+        /** soundId for Later handling of sound pool **/
+        final int redSound = sp.load(getContext(), R.raw.anote_red, 1); // in 2nd param u have to pass your desire ringtone
+        final int blueSound = sp.load(getContext(), R.raw.enote_blue, 1); // in 2nd param u have to pass your desire ringtone
+        final int yellowSound = sp.load(getContext(), R.raw.csharpnote_yellow, 1); // in 2nd param u have to pass your desire ringtone
+        final int greenSound = sp.load(getContext(), R.raw.enote_green, 1); // in 2nd param u have to pass your desire ringtone
+        final int orangeSound = sp.load(getContext(), R.raw.fnote_orange, 1); // in 2nd param u have to pass your desire ringtone
+
         //sets up listeners for buttons
         mBoard.getRedButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                               //Red
                 //mRedButton.clearAnimation();
-                click(getString(R.string.RED));
+                click(getString(R.string.RED), redSound);
             }
         });
         mBoard.getBlueButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                              //Blue
                 //mBlueButton.clearAnimation();
-                click(getString(R.string.BLUE));
+                click(getString(R.string.BLUE), blueSound);
             }
         });
         mBoard.getYellowButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                            //Yellow
                 //mYellowButton.clearAnimation();
-                click(getString(R.string.YELLOW));
+                click(getString(R.string.YELLOW), yellowSound);
             }
         });
         mBoard.getGreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                             //Green
                 //mGreenButton.clearAnimation();
-                click(getString(R.string.GREEN));
+                click(getString(R.string.GREEN), greenSound);
             }
         });
         mBoard.getOrangeButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(android.view.View view) {                            //Orange
                 //mOrangeButton.clearAnimation();
-                click(getString(R.string.ORANGE));
+                click(getString(R.string.ORANGE), orangeSound);
             }
         });
         mResetButton.setOnClickListener(new View.OnClickListener() {
@@ -132,37 +143,19 @@ public class AubieFragment extends Fragment {
      * deals with player clicks. sets new sequence (will need to be removed eventually, sets game
      * over and sets score
      */
-    public void click(String color) {
-       if(!mBoard.isAnimatorRunning()) {
-           switch (color){
-               case "red":
-                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.anote_red);
-                   break;
-               case "blue":
-                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.enote_blue);
-                   break;
-               case "yellow":
-                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.csharpnote_yellow);
-                   break;
-               case "green":
-                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.enote_green);
-                   break;
-               case "orange":
-                   mediaPlayer = MediaPlayer.create(getContext(), R.raw.fnote_orange);
-                   break;
-               default:
-           }
-           if (!mGameOver) {
-               mGameOver = mBoard.checkInput(color);
-               if(!mGameOver) mediaPlayer.start();
-           }
-           if (mGameOver) {
-               v.findViewById(R.id.gameOverScreen).setVisibility(View.VISIBLE); //sets game over screen to visible
-               v.findViewById(R.id.board).setVisibility(View.INVISIBLE);        //sets board to invisible
-               v.findViewById(R.id.replay).setVisibility(View.INVISIBLE);       //sets replay to invisible
-               mScoreBoard.setText(setScore());
-           }
-       }
+    public void click(String color, int sound) {
+        if(!mBoard.isAnimatorRunning()) {
+            if (!mGameOver) {
+                mGameOver = mBoard.checkInput(color);
+                if (!mGameOver) sp.play(sound, 1, 1, 0, 0, 1);
+            }
+            if (mGameOver) {
+                v.findViewById(R.id.gameOverScreen).setVisibility(View.VISIBLE); //sets game over screen to visible
+                v.findViewById(R.id.board).setVisibility(View.INVISIBLE);        //sets board to invisible
+                v.findViewById(R.id.replay).setVisibility(View.INVISIBLE);       //sets replay to invisible
+                mScoreBoard.setText(setScore());
+            }
+        }
     }
 
     public String setScore(){
