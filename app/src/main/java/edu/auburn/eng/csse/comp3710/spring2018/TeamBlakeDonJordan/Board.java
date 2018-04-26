@@ -3,6 +3,8 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -202,7 +204,14 @@ public class Board implements Parcelable {
         mAnimation = new AnimatorSet();
         mAnimation.playSequentially(mAnimatorArray);
         mAnimation.end();
-        mAnimation.start();
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() { //DELAYS THE ANIMATIONS FOR 1 SECOND
+                /* Create an Intent that will start the Menu-Activity. */
+                mAnimation.start();
+            }
+        }, 1000);
+
     }
 
     /* reset()

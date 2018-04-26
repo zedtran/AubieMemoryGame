@@ -18,7 +18,6 @@ public class HolderActivity extends Activity {
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         fm.beginTransaction()
                 .add(R.id.fragment_container, nextFrag,"findThisFragment")
-                .addToBackStack(null)
                 .commit();
     }
 }

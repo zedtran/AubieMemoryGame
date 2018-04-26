@@ -26,8 +26,6 @@ public class MainMenuActivity extends Activity{
         Button mExtrasButton = findViewById(R.id.extra);
 
 
-
-
         //sets up listeners for buttons
         mPlayGameButton.setOnClickListener(new View.OnClickListener() {
             @Override

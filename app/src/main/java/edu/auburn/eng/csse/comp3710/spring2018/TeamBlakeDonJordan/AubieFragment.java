@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -65,7 +66,6 @@ public class AubieFragment extends Fragment {
 
         if(mPlayOriginal)  gameType.setText(getString(R.string.simonTitle));   //decided to play simon or aubie game
         else  gameType.setText(getString(R.string.aubieTitle));
-
 
         if(savedInstanceState == null){
             mBoard = new Board(mPlayOriginal, v, difficulty, getContext()); //difficulty will be chosen through preferences Easy/Normal/Hard/Extreme
