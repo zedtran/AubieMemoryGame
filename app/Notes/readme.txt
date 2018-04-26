@@ -8,5 +8,5 @@ This readme file contains the following information:
 
 4. A list of known bugs:
 	- sound still buggy and choppy
-	- sound still stops after pressing buttons alot of times
+
 

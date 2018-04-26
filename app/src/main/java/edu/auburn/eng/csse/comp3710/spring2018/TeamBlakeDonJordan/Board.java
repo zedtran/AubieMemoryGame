@@ -40,12 +40,12 @@ public class Board implements Parcelable {
     private int mInputNumber = 0;
 
     private ArrayList<String> mSequence = new ArrayList<>();
-    private ArrayList<Animator> AnimatorArray = new ArrayList<>();
+    private ArrayList<Animator> mAnimatorArray = new ArrayList<>();
     private AnimatorSet mAnimation = new AnimatorSet();
 
     private boolean playOriginal;
 
-    private Random rand;
+    private Random rand = new Random();
     private String choices[] = {RED, BLUE, YELLOW, GREEN, ORANGE};
 
     private int mDifficultyModifier = 1;
@@ -90,11 +90,18 @@ public class Board implements Parcelable {
         this.playOriginal = playOriginal;
 
     }
-
+    /* updateBoard(v)
+     * after state destruction views need to be reset
+     */
     public void updateBoard(View v){
         for(Light l : mLights){
             l.updateBoard(v);
         }
+        mAnimatorArray = new ArrayList<>();
+        for(String s : mSequence){
+            mAnimatorArray.add((getLight(s).addAnimation()));
+        }
+        playAnimation();
     }
     /* getScore()
      * returns player score
@@ -138,14 +145,14 @@ public class Board implements Parcelable {
     private void aubieSequence() {
         mSequence = new ArrayList<>(mScore + 1);
         mInputNumber = 0;
-        AnimatorArray  = new ArrayList<>();
+        mAnimatorArray  = new ArrayList<>();
         int index = mScore + 1;
-        rand = new Random();
+        //rand = new Random();
         do //using a do here so when the score is initially zero, beginning of game, it will still loop
         {
             String chosenColor = choices[rand.nextInt(5)];
             mSequence.add(chosenColor);
-            AnimatorArray.add((getLight(chosenColor).addAnimation()));
+            mAnimatorArray.add((getLight(chosenColor).addAnimation()));
             index--;
         } while (index > 0);
         mSequence.trimToSize(); //just in case mSequence gets to big
@@ -158,13 +165,13 @@ public class Board implements Parcelable {
      */
     private void simonSequence() {
         mInputNumber = 0;
-        rand = new Random();
+        //rand = new Random();
         String chosenColor = choices[rand.nextInt(5)];
         mSequence.add(chosenColor);
-        AnimatorArray.add((getLight(chosenColor).addAnimation()));
+        mAnimatorArray.add((getLight(chosenColor).addAnimation()));
         mSequence.trimToSize(); //just in case mSequence gets to big
         playAnimation();
-        Log.i("debug", getSequenceString());
+        //Log.i("debug", getSequenceString());
     }
 
     /* checkInput(color)
@@ -190,12 +197,12 @@ public class Board implements Parcelable {
     }
     
     public void playAnimation(){
-        AnimatorArray.trimToSize();
+        mAnimatorArray.trimToSize();
         if((!playOriginal && mScore == 0) || (playOriginal && mScore == 1)){           //when you choose aubie's game and its the initial run the animation is finicky and needs to be forced to play
-            AnimatorArray.set(0, (getLight(mSequence.get(0)).addAnimation()));
+            mAnimatorArray.set(0, (getLight(mSequence.get(0)).addAnimation()));
         }
         mAnimation = new AnimatorSet();
-        mAnimation.playSequentially(AnimatorArray);
+        mAnimation.playSequentially(mAnimatorArray);
         mAnimation.end();
         mAnimation.start();
     }
@@ -209,7 +216,7 @@ public class Board implements Parcelable {
         mAnimation.end();
         if(playOriginal){
             mSequence = new ArrayList<>();
-            AnimatorArray = new ArrayList<>();
+            mAnimatorArray = new ArrayList<>();
             simonSequence();
         }
         else aubieSequence();
@@ -284,7 +291,7 @@ public class Board implements Parcelable {
 
     private Board(Parcel in) {
         mSequence = in.readArrayList(String.class.getClassLoader());
-        AnimatorArray = in.readArrayList(Animator.class.getClassLoader());
+        mAnimatorArray = in.readArrayList(Animator.class.getClassLoader());
         mScore = in.readInt();
         playOriginal = in.readByte() != 0;
     }
@@ -297,7 +304,7 @@ public class Board implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeList(mSequence);
-        dest.writeList(AnimatorArray);
+        dest.writeList(mAnimatorArray);
         dest.writeInt(mScore);
         dest.writeByte((byte) (playOriginal ? 1 : 0));
     }

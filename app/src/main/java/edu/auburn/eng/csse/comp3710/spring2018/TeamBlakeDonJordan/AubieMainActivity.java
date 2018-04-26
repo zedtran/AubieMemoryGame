@@ -24,5 +24,4 @@ public class AubieMainActivity extends Activity {
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
     }
-
 }

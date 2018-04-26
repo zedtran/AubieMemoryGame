@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.media.SoundPool;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 
 import java.lang.reflect.Array;
@@ -13,21 +14,22 @@ import java.util.ArrayList;
 
 public class Light {
     private Button mButton;
-    private SoundPool mSound = new SoundPool.Builder().build();
+    private SoundPool mSoundPool = new SoundPool.Builder().build();
+    private int mSound;
     private String mColor;
     private int mDifficultyModifier;
 
     Light(Button mButton, int mSound, String mColor, Context context, int mDifficultyModifier){
         this.mButton = mButton;
         this.mColor = mColor;
-        this.mSound.load(context, mSound, 1);
+        this.mSound = mSoundPool.load(context, mSound, 1);
         this.mDifficultyModifier = mDifficultyModifier;
     }
     public Button getButton() {
         return mButton;
     }
 
-    public SoundPool getSoundPool() {
+    public int getSoundPool() {
         return mSound;
     }
 
@@ -65,5 +67,4 @@ public class Light {
                 break;
         }
     }
-
 }
