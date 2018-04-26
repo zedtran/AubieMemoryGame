@@ -13,12 +13,13 @@ import android.os.Handler;
 public class AubieSplashActivity extends Activity {
 
 
-    /** Duration of wait **/
-    private final int SPLASH_DISPLAY_LENGTH = 1500;
+
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle bundle) {
+        final int SPLASH_DISPLAY_LENGTH = 1500; // Duration of wait
+
         super.onCreate(bundle);
         setContentView(R.layout.activity_splash);
 

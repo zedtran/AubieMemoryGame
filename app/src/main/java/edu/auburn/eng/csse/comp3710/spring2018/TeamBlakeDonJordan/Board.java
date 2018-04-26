@@ -2,8 +2,6 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -229,15 +227,6 @@ public class Board implements Parcelable {
      */
     public void resetInputCount(){
         mInputNumber = 0;
-    }
-
-    /* getSequence()
-     * Returns expected sequence of colors
-     */
-    public String getSequenceString() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < mSequence.size(); i++) builder.append(mSequence.get(i) + " ");
-        return builder.toString();
     }
 
     /* getSequenceList()

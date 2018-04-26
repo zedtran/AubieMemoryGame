@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="User Settings">
+        <CheckBoxPreference
+            android:key="pref_dark"
+            android:title="@string/pref_dark"
+            android:summary="@string/pref_darkSum"
+            android:defaultValue="false" />
+        <ListPreference
+            android:key="pref_difficulty"
+            android:entries="@array/pref_difficult_entries"
+            android:entryValues="@array/pref_difficult_values"
+            android:title="@string/pref_difficulty"
+            android:defaultValue="@string/pref_difficulty_default"
+            android:dialogTitle="@string/pref_difficulty"/>
+    </PreferenceCategory>
+</PreferenceScreen>

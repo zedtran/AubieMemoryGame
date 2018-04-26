@@ -3,17 +3,16 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
 
 import android.app.Fragment;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.content.SharedPreferences;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -58,17 +57,18 @@ public class AubieFragment extends Fragment {
         Button mResetButton =  v.findViewById(R.id.reset);
         Button mReplayButton = v.findViewById(R.id.replay);
         TextView gameType = v.findViewById(R.id.gameType);
-
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean mPlayOriginal = true;
-
+        String difficulty = sharedPrefs.getString("pref_difficulty", "Easy");
 
         if (bundle != null) mPlayOriginal = bundle.getBoolean("PLAY_ORIGINAL"); //sets play original value
 
         if(mPlayOriginal)  gameType.setText(getString(R.string.simonTitle));   //decided to play simon or aubie game
         else  gameType.setText(getString(R.string.aubieTitle));
 
+
         if(savedInstanceState == null){
-            mBoard = new Board(mPlayOriginal, v, "Normal", getContext()); //difficulty will be chosen through preferences Easy/Normal/Hard/Extreme
+            mBoard = new Board(mPlayOriginal, v, difficulty, getContext()); //difficulty will be chosen through preferences Easy/Normal/Hard/Extreme
         }
         else  mBoard.updateBoard(v);
 
@@ -76,7 +76,7 @@ public class AubieFragment extends Fragment {
 
 
 
-        /** soundId for Later handling of sound pool **/
+        /* soundId for Later handling of sound pool */
         final int redSound = sp.load(getContext(), R.raw.anote_red, 1); // in 2nd param u have to pass your desire ringtone
         final int blueSound = sp.load(getContext(), R.raw.enote_blue, 1); // in 2nd param u have to pass your desire ringtone
         final int yellowSound = sp.load(getContext(), R.raw.csharpnote_yellow, 1); // in 2nd param u have to pass your desire ringtone

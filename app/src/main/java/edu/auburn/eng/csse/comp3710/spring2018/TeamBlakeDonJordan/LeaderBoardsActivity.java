@@ -1,5 +1,6 @@
 package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
+import android.app.Activity;
 import android.app.Fragment;
 import java.sql.Date;
 import java.util.Locale;
@@ -18,7 +19,7 @@ import android.view.ViewGroup;
  * Created by Jordan, Don, and Blake on 4/23/2018.
  */
 
-public class LeaderBoardsFragment extends Fragment {
+public class LeaderBoardsActivity extends Activity {
     private static final String DEBUG_TAG = "SimpleDB Log";
     private static final String DATABASE_NAME = "leadboards.db";
 
@@ -35,6 +36,7 @@ public class LeaderBoardsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_leaderboards);
         if(savedInstanceState != null){}
     }
 
@@ -43,12 +45,6 @@ public class LeaderBoardsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_leaderboards, container, false);
-        //runDatabase();
-        return v;
-    }
 
     @SuppressLint("WrongConstant")
     public void runDatabase() {

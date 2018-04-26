@@ -18,6 +18,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".AubieMainActivity" android:theme="@style/Splash"/>
+        <activity android:name=".OptionsActivity"/>
+        <activity android:name=".MainMenuActivity"/>
+        <activity android:name=".LeaderBoardsActivity"/>
+        <activity android:name=".ExtrasActivity"/>
+        <activity android:name=".HolderActivity"/>
+
     </application>
 
 </manifest>
