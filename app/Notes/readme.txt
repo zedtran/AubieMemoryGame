@@ -8,5 +8,7 @@ This readme file contains the following information:
 
 4. A list of known bugs:
 	- sound still buggy and choppy
+	- if you go to the game choice screen and hit back it takes you to a blank screen hitting back again
+	  takes you to the main menu
 
 
