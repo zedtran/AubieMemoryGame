@@ -16,7 +16,8 @@ import java.util.Random;
 /**
  * Board class
  *
- * Contain all the logic for the game
+ * Contain all the logic for the game --
+ * This is the MVC Model
  *
  * Created by Jordan, Don, and Blake on 4/12/2018.
  */

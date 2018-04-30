@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.sql.Date;
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -154,6 +156,58 @@ public class AubieFragment extends Fragment {
                 v.findViewById(R.id.board).setVisibility(View.INVISIBLE);        //sets board to invisible
                 v.findViewById(R.id.replay).setVisibility(View.INVISIBLE);       //sets replay to invisible
                 mScoreBoard.setText(setScore());
+
+                //TODO: Custom Alert Dialog (DON: Just setting up what I have to do next)
+                /**
+                 * (1) Traverse high scores
+                 *     tempHighScoreIndex = -1
+                 *     for i = 1 to highest_score_index (NOTE: i = '1' != '0') {
+                 *          IF (NEW_USER_SCORE > tbl_high_scores[i - 1])
+                 *              IF (NEW_USER_SCORE <= tbl_high_scores[i])
+                 *                  tempHighScoreIndex = i - 1
+                 *                  BREAK
+                 *          ELSE IF (NEW_USER_SCORE > tbl_high_scores[i])
+                 *              tempHighScoreIndex = i
+                 *              CONTINUE;
+                 *     }
+                 *
+                 *     IF (tempHighScoreIndex == -1)
+                 *          DISPLAY current leaderbaord
+                 *
+                 *     ELSE {
+                 *          Alert Dialog for inputText name and congrats on "tempHighScoreIndex" placement on leaderboard
+                 *          Set Default input text to "Anonymous"
+                 *          User prompt to input.getText() for their name {text length > 0} -- No further conditional error checks (i.e. Don't worry about multiple entries of the same name, etc.)
+                 *              ------------------------------------------------------------------------------------
+                 *              | NOTE: USER WILL NOT HAVE OPTION TO CANCEL SCOREBOARD ENTRY                       |
+                 *              |       They can only force close the app to ignore entry -- Alert MUST be handled |
+                 *              ------------------------------------------------------------------------------------
+                 *
+                 *          IF (text input length <= 0)
+                 *              TOAST input name > 0 REQUIRED
+                 *              -- Possibly animate Alert Dialog to show wiggle behavior (Optional)
+                 *          SQL query update table and replace tbl_high_scores[tempHighScoreIndex] = NEW_USER_SCORE
+                 *          DISPLAY updated leaderbaord
+                 *          RETURN to MAIN MENU or Continue Replay from last state
+                 *     }
+                 *
+                 * NOTE:
+                 *      - Might have to import relevant SQL Classes here depending on implementation
+                 *      - Still need to decide on segue/transition from alert dialog to leaderboards display
+                 *          >> Do we transition to activity_leaderboards view?
+                 *              >> IF SO, would be simply put the current view on the backstack?
+                 *              >> IF NOT, would we need to create a new fragment?
+                 *                  CONS:
+                 *                      - Seems redundant because we already have a leaderboards layout and db access for transactions in associated activity
+                 *                      - Would negatively impact code readability
+                 *                  PROS:
+                 *                      - Code reuse
+                 * USEFUL SOURCES:
+                 *      (1) For creating an Alert Dialog: https://stackoverflow.com/a/10904665
+                 *      (2) For wrapping up LeaderBoardsActivity.java: http://www.androiddom.com/2011/06/android-and-sqlite.html
+                 *      (3) *For using SQLOpenHelper: https://developer.android.com/training/data-storage/sqlite#java
+                 *
+                 */
             }
         }
     }
