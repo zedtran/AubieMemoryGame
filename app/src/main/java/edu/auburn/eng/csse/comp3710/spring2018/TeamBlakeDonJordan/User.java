@@ -10,10 +10,10 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
 // Helper class to encapsulate User information programmatically
 public class User {
-    String mUsername;
-    long mDateAdded;
-    long mId;
-    int mScore;
+    private String mUsername;
+    private long mDateAdded;
+    private long mId;
+    private int mScore;
 
     public User(String username, long dateAdded, int score) {
         mUsername = username;
@@ -21,6 +21,8 @@ public class User {
         mScore = score;
         mId = -1;
     }
+
+    // GETTERS
 
     public String getUserName() {
         return this.mUsername;
@@ -37,4 +39,24 @@ public class User {
     public int getScore() {
         return this.mScore;
     }
+
+    // SETTERS
+
+    public void setScore(int score) {
+        this.mScore = score;
+    }
+
+    public void setUserName(String name) {
+        this.mUsername = name;
+    }
+
+    public void setDateUserAdded(long date) {
+        this.mDateAdded = date;
+    }
+
+    public void setID(long id) {
+        this.mId = id;
+    }
+
+
 }
