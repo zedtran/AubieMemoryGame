@@ -5,7 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.content.Context;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /** Leaderboards
@@ -35,6 +42,16 @@ public class LeaderBoardsActivity extends Activity {
         dbHelper = new ScoreboardDBHelper(mContext);
         if(savedInstanceState != null) { }
         Log.d(DEBUG_TAG, "onCreate()");
+
+
+
+
+        String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry",
+                "WebOS","Ubuntu","Windows7","Max OS X"};
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_item, mobileArray);
+        ListView listView = findViewById(R.id.leaderboard);
+        listView.setAdapter(adapter);
+
     }
 
     @Override
@@ -44,3 +61,6 @@ public class LeaderBoardsActivity extends Activity {
 
 
 }
+
+
+
