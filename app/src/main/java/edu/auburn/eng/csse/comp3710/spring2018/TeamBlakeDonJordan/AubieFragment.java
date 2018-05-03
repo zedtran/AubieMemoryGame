@@ -19,6 +19,7 @@ import android.app.AlertDialog;
 import android.widget.EditText;
 import android.text.InputType;
 import android.content.DialogInterface;
+import android.text.InputFilter;
 import java.util.List;
 import java.util.Formatter;
 import java.util.Locale;
@@ -293,12 +294,17 @@ public class AubieFragment extends Fragment {
     private void showGameOverAlert(final int updateIndex, final List<User> highScoreUserList) {
 
         // Final values, variables & Inner class usage vars
-        final String positionSuffix = getNumSuffix(updateIndex);
+        final int positionNum = updateIndex - 1;
+        final String positionSuffix = getNumSuffix(positionNum);
         final String alertMessageTitle;
         final CharSequence toastMsg;  // Sets up toast alert
         final EditText input;         // Sets up the alert input
         AlertDialog alertDialog;      // Initialize simple alert for Game Over alert
         AlertDialog.Builder builder;  // Initialize alert builder for Game Over + New Leaderboard entry
+        final int MAX_LENGTH = 10;    // Limiting Name input field to 10 Characters
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(MAX_LENGTH);
+
 
         /////////////////////////////////////////////////////////////////////////
         // If the user didn't get a high enough score to make the scoreboard,  //
@@ -332,7 +338,7 @@ public class AubieFragment extends Fragment {
                 // NOTE: scoreSuffix should NOT be null. If null, then position number is incorrect
             }
             else {
-                alertMessageTitle = updateIndex + positionSuffix + " Place!";
+                alertMessageTitle = positionNum + positionSuffix + " Place!";
             }
 
             // Alert Dialog for inputText name and congrats on placement on scoreboard
@@ -342,6 +348,7 @@ public class AubieFragment extends Fragment {
 
             // Specify the type of input expected
             input = new EditText(getActivity());
+            input.setFilters(FilterArray);
             input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
             builder.setView(input);
 
