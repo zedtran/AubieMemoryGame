@@ -37,9 +37,6 @@ public final class ScoreboardDBContract {
         public static final String COLUMN_USERNAMES     = "txt_username";
         public static final String COLUMN_SCORES        = "int_scores";
         public static final String COLUMN_DATE_ADDED    = "date_dateadded";
-
-        public static final String[] COLUMNS            = {TABLE_NAME, COLUMN_USERNAMES, COLUMN_SCORES, COLUMN_DATE_ADDED};
-
         public static final String CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME +
                 " (" + _ID + " INTEGER PRIMARY KEY" + COMMA + SPACE +

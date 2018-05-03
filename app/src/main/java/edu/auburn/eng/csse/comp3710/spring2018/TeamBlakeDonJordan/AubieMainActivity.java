@@ -20,13 +20,5 @@ public class AubieMainActivity extends Activity {
         Intent mainIntent = new Intent(this, MainMenuActivity.class);
         startActivity(mainIntent);
 
-        // Create new helper
-        ScoreboardDBHelper dbHelper = new ScoreboardDBHelper(this); // Prototype param was previously "getContext()"
-
-        // Get the database. If it does not exist, this is where it will
-        // also be created.
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-
     }
 }

@@ -188,10 +188,11 @@ public class AubieFragment extends Fragment {
                 int tempHighScoreIndex = -1;
                 final int gameOverScore = getFinalScore();
 
-                /**
+                /*
                  * Traverse the High Scores. If player scored high enough,
                  * find out where they placed.
                  */
+
                 /////////////////////////////////////////////
                 // If the leader board is currently empty, //
                 // the player made first place             //
@@ -292,8 +293,7 @@ public class AubieFragment extends Fragment {
     private void showGameOverAlert(final int updateIndex, final List<User> highScoreUserList) {
 
         // Final values, variables & Inner class usage vars
-        final int scorePosition = highScoreUserList.size() - updateIndex;
-        final String positionSuffix = getNumSuffix(scorePosition);
+        final String positionSuffix = getNumSuffix(updateIndex);
         final String alertMessageTitle;
         final CharSequence toastMsg;  // Sets up toast alert
         final EditText input;         // Sets up the alert input
@@ -305,7 +305,7 @@ public class AubieFragment extends Fragment {
         // Show a simple alert message indicating game over                    //
         /////////////////////////////////////////////////////////////////////////
         if (updateIndex == -1) {
-            toastMsg = "Check Leaderboard from Main Menu.";
+            toastMsg = "Check Leader board from Main Menu.";
             alertMessageTitle = "GAME OVER";
 
             // Make Alert
@@ -325,14 +325,14 @@ public class AubieFragment extends Fragment {
         // Add the User Score to the Leader Board //
         ////////////////////////////////////////////
         else {
-            toastMsg = "Updated! Check Leaderboard from Main Menu.";
+            toastMsg = "Updated! Check Leader board from Main Menu.";
 
             if (positionSuffix == null) {
                 alertMessageTitle = "CONGRATULATIONS";
                 // NOTE: scoreSuffix should NOT be null. If null, then position number is incorrect
             }
             else {
-                alertMessageTitle = scorePosition + positionSuffix + " Place!";
+                alertMessageTitle = updateIndex + positionSuffix + " Place!";
             }
 
             // Alert Dialog for inputText name and congrats on placement on scoreboard

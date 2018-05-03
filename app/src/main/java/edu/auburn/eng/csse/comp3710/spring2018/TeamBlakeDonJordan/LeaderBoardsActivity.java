@@ -45,7 +45,7 @@ public class LeaderBoardsActivity extends Activity {
         Collections.reverse(users); // Reverses the list to put highest score on top
         ArrayList<String> userList = new ArrayList<>();
         for(User user : users){
-            userList.add(user.getUserName() + " " + user.getScore() + " " + user.getFormattedDate());
+            userList.add(user.getUserName() + "\t" + user.getScore() + "\t" + user.getFormattedDate());
         }
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_item, userList);

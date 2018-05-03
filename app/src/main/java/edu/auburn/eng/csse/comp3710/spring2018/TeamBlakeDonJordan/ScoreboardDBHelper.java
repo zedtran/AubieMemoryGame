@@ -1,6 +1,6 @@
 package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
-/**
+/*
  * Created by donaldtran on 4/29/18.
  *
  * A helper class to manage database creation and version management.
@@ -32,6 +32,7 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
             ScoreboardDBContract.ScoreboardEntry.COLUMN_DATE_ADDED + " = ?";
 
     // Public constructor for instantiation and use in different classes
+    @SuppressWarnings("WeakerAccess")
     public ScoreboardDBHelper(Context context) {
         super(context, ScoreboardDBContract.DATABASE_NAME, null, ScoreboardDBContract.DATABASE_VERSION);
     }
