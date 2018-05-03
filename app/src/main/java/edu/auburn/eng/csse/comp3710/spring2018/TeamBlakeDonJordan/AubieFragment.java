@@ -292,7 +292,7 @@ public class AubieFragment extends Fragment {
     private void showGameOverAlert(final int updateIndex, final List<User> highScoreUserList) {
 
         // Final values, variables & Inner class usage vars
-        final int scorePosition = updateIndex + 1;
+        final int scorePosition = highScoreUserList.size() - updateIndex;
         final String positionSuffix = getNumSuffix(scorePosition);
         final String alertMessageTitle;
         final CharSequence toastMsg;  // Sets up toast alert
