@@ -33,11 +33,19 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/playGame"
+                android:id="@+id/aubiegame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/greenAccent"
-                android:text="@string/PLAY"
+                android:text="@string/AUBIE"
+                android:textColor="@color/white"
+                android:textSize="23dp" />
+            <Button
+                android:id="@+id/simongame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blueAccent"
+                android:text="@string/simon"
                 android:textColor="@color/white"
                 android:textSize="23dp" />
 
@@ -59,14 +67,7 @@
                 android:textColor="@color/white"
                 android:textSize="23dp" />
 
-            <Button
-                android:id="@+id/extra"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/blueAccent"
-                android:text="@string/extra"
-                android:textColor="@color/white"
-                android:textSize="23dp" />
+
 
         </LinearLayout>
     </LinearLayout>

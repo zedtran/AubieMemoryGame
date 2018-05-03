@@ -9,10 +9,9 @@
     <string name="AUBIE"> Play Aubie\'s Memory Game </string>
     <string name="SIMON"> Play Simon </string>
     <string name="OPTIONS"> Options </string>
-    <string name="PLAY"> Play Game </string>
     <string name="aubieTitle">Aubie\'s Memory Game</string>
     <string name="simonTitle">Simon\'s Memory Game</string>
-    <string name="extra">Extras</string>
+    <string name="simon">Play Original Simon</string>
     <string name="replay">Replay</string>
     <string name="reset">Reset</string>
     <string name="pref_dark">Dark Mode</string>

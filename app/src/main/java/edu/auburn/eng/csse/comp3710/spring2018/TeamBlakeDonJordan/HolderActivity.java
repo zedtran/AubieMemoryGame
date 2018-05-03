@@ -11,11 +11,13 @@ public class HolderActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aubie_main);
-        Fragment nextFrag= new GameTypeFragment();
+
+        Fragment nextFrag= new AubieFragment();
+        boolean PLAY_ORIGINAL = getIntent().getExtras().getBoolean("PLAY_ORIGINAL");
         Bundle bundle = new Bundle();
+        bundle.putBoolean("PLAY_ORIGINAL", PLAY_ORIGINAL);
         nextFrag.setArguments(bundle);
         final FragmentManager fm = getFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
         fm.beginTransaction()
                 .add(R.id.fragment_container, nextFrag,"findThisFragment")
                 .commit();

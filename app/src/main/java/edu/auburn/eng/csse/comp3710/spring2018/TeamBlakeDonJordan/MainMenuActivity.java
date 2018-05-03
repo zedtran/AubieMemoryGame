@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,19 +21,27 @@ public class MainMenuActivity extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
-        Button mPlayGameButton = findViewById(R.id.playGame);
+        Button mPlayAubieGameButton = findViewById(R.id.aubiegame);
         Button mLeaderBoardsButton = findViewById(R.id.leadboards);
         Button mOptionsButton = findViewById(R.id.options);
-        Button mExtrasButton = findViewById(R.id.extra);
+        Button mPlaySimonGameButton = findViewById(R.id.simongame);
 
 
         //sets up listeners for buttons
-        mPlayGameButton.setOnClickListener(new View.OnClickListener() {
+        mPlayAubieGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(android.view.View view) {                               //Play
-                /*findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
-                findViewById(R.id.mainMenu).setVisibility(View.GONE);*/
+            public void onClick(android.view.View view) {                               //Play Aubie
+
                 Intent intent = new Intent(MainMenuActivity.this, HolderActivity.class);
+                intent.putExtra("PLAY_ORIGINAL", false);  //sets bundle to be sent to next fragment
+                startActivity(intent);
+            }
+        });
+        mPlaySimonGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(android.view.View view) {                               //Play Simon
+                Intent intent = new Intent(MainMenuActivity.this, HolderActivity.class);
+                intent.putExtra("PLAY_ORIGINAL", true);  //sets bundle to be sent to next fragment
                 startActivity(intent);
             }
         });
@@ -40,13 +49,6 @@ public class MainMenuActivity extends Activity{
             @Override
             public void onClick(android.view.View view) {                               //Leaderboards
                 Intent intent = new Intent(MainMenuActivity.this, LeaderBoardsActivity.class);
-                startActivity(intent);
-            }
-        });
-        mExtrasButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(android.view.View view) {                               //Extras Fragment
-                Intent intent = new Intent(MainMenuActivity.this, ExtrasActivity.class);
                 startActivity(intent);
             }
         });
@@ -60,3 +62,4 @@ public class MainMenuActivity extends Activity{
 
     }
 }
+
