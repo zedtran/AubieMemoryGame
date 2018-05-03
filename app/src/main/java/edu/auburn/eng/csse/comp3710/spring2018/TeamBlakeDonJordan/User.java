@@ -18,7 +18,7 @@ public class User {
     private int mScore;
 
 
-    public User(String username, long dateAdded, int score) {
+    public User(String username, int score, long dateAdded) {
         mUsername = username;
         mDateAdded = dateAdded;
         mScore = score;
@@ -65,10 +65,6 @@ public class User {
 
     public void setID(long id) {
         this.mId = id;
-    }
-
-    public String toString(){
-        return mUsername + " " + Integer.toString(mScore);
     }
 
 }

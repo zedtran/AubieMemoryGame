@@ -76,7 +76,7 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
         User user;
         if (cursor.moveToFirst()) {
             do{
-                user = new User(cursor.getString(0), cursor.getLong(1), cursor.getInt(2));
+                user = new User(cursor.getString(0), cursor.getInt(1), cursor.getLong(2)); // 0th index is the Primary key
                 userArrayList.add(user);
             } while (cursor.moveToNext());
             cursor.close();
@@ -112,18 +112,14 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
         return user.getID();
     }
 
-    // Replace all values of oldUser with that of newUser
+    // Replace all values of oldUser with that of newUser (SQL DELETE + SQL INSERT)
     public long replaceUserScore(User oldUser, User newUser) {
         // DB WhereArgs for oldUser
         String whereArgsOldUser[] = new String[] {String.valueOf(oldUser.getUserName()),
                 String.valueOf(oldUser.getScore()),
                 String.valueOf(oldUser.getDateUserAdded())
         };
-        // DB WhereArgs for newUser
-        String whereArgsNewUser[] = new String[] {String.valueOf(newUser.getUserName()),
-                String.valueOf(newUser.getScore()),
-                String.valueOf(newUser.getDateUserAdded())
-        };
+
         // DB values to add for newUser
         ContentValues values = new ContentValues();
         values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_USERNAMES, newUser.getUserName());
@@ -137,7 +133,7 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             oldUser.setID(db.delete(ScoreboardDBContract.ScoreboardEntry.TABLE_NAME, WHERE_CLAUSE, whereArgsOldUser));
-            newUser.setID(db.update(ScoreboardDBContract.ScoreboardEntry.TABLE_NAME, values, WHERE_CLAUSE, whereArgsNewUser));
+            newUser.setID(db.insertOrThrow(ScoreboardDBContract.ScoreboardEntry.TABLE_NAME, null, values));
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();

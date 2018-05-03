@@ -185,7 +185,6 @@ public class AubieFragment extends Fragment {
                 final List<User> highScoreUserList = dbHelper.getTopTenUsers();
                 User userPrevious;
                 User userNext;
-                //boolean newEntry = false;  //TODO
                 int tempHighScoreIndex = -1;
                 final int gameOverScore = getFinalScore();
 
@@ -330,7 +329,7 @@ public class AubieFragment extends Fragment {
 
             if (positionSuffix == null) {
                 alertMessageTitle = "CONGRATULATIONS";
-                // NOTE: scoreSuffix should NOT be null. If null,
+                // NOTE: scoreSuffix should NOT be null. If null, then position number is incorrect
             }
             else {
                 alertMessageTitle = scorePosition + positionSuffix + " Place!";
@@ -351,7 +350,7 @@ public class AubieFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mAlertInputTypeText = input.getText().toString();
-                    User newUser = new User(mAlertInputTypeText, System.currentTimeMillis(), getFinalScore());
+                    User newUser = new User(mAlertInputTypeText, getFinalScore(), System.currentTimeMillis());
                     if (updateIndex >= 1) {
                         User oldUser = highScoreUserList.get(updateIndex);
                         newUser.setID(dbHelper.replaceUserScore(oldUser, newUser));

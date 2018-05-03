@@ -5,15 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.content.Context;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-
+import java.util.Collections;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 
 /** Leaderboards
@@ -46,11 +42,12 @@ public class LeaderBoardsActivity extends Activity {
 
 
         ArrayList<User> users = dbHelper.getTopTenUsers();
+        Collections.reverse(users); // Reverses the list to put highest score on top
         ArrayList<String> userList = new ArrayList<>();
         for(User user : users){
-            userList.add(user.toString());
+            userList.add(user.getUserName() + " " + user.getScore() + " " + user.getFormattedDate());
         }
-        String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry", "WebOS","Ubuntu","Windows7","Max OS X"};
+
         ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_item, userList);
         ListView listView = findViewById(R.id.leaderboard);
         listView.setAdapter(adapter);
