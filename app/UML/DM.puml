@@ -1,34 +1,64 @@
 @startuml
 
 title Aubie's Memory Game Domain Model
-class Player {
-highScore
-}
-class LeaderBoards {
+
+class PlayGame {
+    playSimon
+    playAubie
+    Board
+    GameOver: boolean
+    replayCount
+    Sounds
 }
 
-class Button {
-color
-isLit
-}
-class Controller {
-    greenLit
-    blueLit
-    yellowLit
-    redLit
-    score
+class Options {
     difficulty
 }
+
 class Board {
+    redLight
+    blueLight
+    greenLight
+    yellowLight
+    orangeLight
+    score
+    userInput
+    Animations
 }
 
-Board "1" *-- "4" Button : contains >
-Board "1" *-- "1" Controller : contains >
-Player "1" -- "1" Controller: listensTo >
-Player "1" -- "4" Button: presses >
-Player "*" -- "1" LeaderBoards: uploades score >
-Controller "1" -- "4" Button: signals which button to light up >
 
-hide empty members
+class Leaderboard {
+    Database
+}
+
+class Lights {
+    Button
+    Sounds
+    color
+}
+
+class MainMenu {
+    playAubieButton
+    playSimonButton
+    optionsButton
+    leaderboardsButton
+}
+
+Class User {
+    username
+    id
+    score
+    playDate
+}
+
+MainMenu "1" *-- "1" PlayGame : Starts >
+MainMenu "1" *-- "1" Leaderboard : Starts >
+MainMenu "1" *-- "1" Options : Starts >
+Options "1" -- "1" PlayGame : Influences >
+User "*" -- "1" PlayGame : Controls >
+User "*" -- "1" Leaderboard : Gets Added To >
+PlayGame "1" *-- "1" Board : Contains >
+Board "1" *-- "5" Lights : Contains >
+
 hide methods
 @enduml
