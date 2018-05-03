@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,8 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.sql.Date;
+import android.widget.Toast;
+import android.content.Context;
+import android.app.AlertDialog;
+import android.widget.EditText;
+import android.text.InputType;
+import android.content.DialogInterface;
+import java.util.List;
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -35,6 +39,13 @@ public class AubieFragment extends Fragment {
     private int replayCount = 0;
     private View v;
     private SoundPool sp = new SoundPool.Builder().build(); //(5, AudioManager.STREAM_MUSIC, 0);
+    private ScoreboardDBHelper dbHelper;
+    private Toast mToast;
+    protected String mAlertInputTypeText; // To be used for AlertDialogs during GameOver
+    private static final CharSequence GAME_OVER_MSG = "Try again. You didn't score high enough to place on the leader board.";
+    private static final CharSequence SCOREBOARD_SUCCESS_MSG = "Congratulations! You made it to the leader board! Please enter your name.";
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +53,9 @@ public class AubieFragment extends Fragment {
             mBoard = savedInstanceState.getParcelable(KEY_BOARD);
 
         }
+
+        // Our SQL Database Access Helper
+        dbHelper = new ScoreboardDBHelper(getActivity());
     }
 
     @Override
@@ -157,71 +171,173 @@ public class AubieFragment extends Fragment {
                 v.findViewById(R.id.replay).setVisibility(View.INVISIBLE);       //sets replay to invisible
                 mScoreBoard.setText(setScore());
 
-                //TODO: Custom Alert Dialog (DON: Just setting up what I have to do next)
-                /**
-                 * (1) Traverse high scores
-                 *     tempHighScoreIndex = -1
-                 *     for i = 1 to highest_score_index (NOTE: i = '1' != '0') {
-                 *          IF (NEW_USER_SCORE > tbl_high_scores[i - 1])
-                 *              IF (NEW_USER_SCORE <= tbl_high_scores[i])
-                 *                  tempHighScoreIndex = i - 1
-                 *                  BREAK
-                 *          ELSE IF (NEW_USER_SCORE > tbl_high_scores[i])
-                 *              tempHighScoreIndex = i
-                 *              CONTINUE;
-                 *     }
-                 *
-                 *     IF (tempHighScoreIndex == -1)
-                 *          DISPLAY current leaderbaord
-                 *
-                 *     ELSE {
-                 *          Alert Dialog for inputText name and congrats on "tempHighScoreIndex" placement on leaderboard
-                 *          Set Default input text to "Anonymous"
-                 *          User prompt to input.getText() for their name {text length > 0} -- No further conditional error checks (i.e. Don't worry about multiple entries of the same name, etc.)
-                 *              ------------------------------------------------------------------------------------
-                 *              | NOTE: USER WILL NOT HAVE OPTION TO CANCEL SCOREBOARD ENTRY                       |
-                 *              |       They can only force close the app to ignore entry -- Alert MUST be handled |
-                 *              ------------------------------------------------------------------------------------
-                 *
-                 *          IF (text input length <= 0)
-                 *              TOAST input name > 0 REQUIRED
-                 *              -- Possibly animate Alert Dialog to show wiggle behavior (Optional)
-                 *          SQL query update table and replace tbl_high_scores[tempHighScoreIndex] = NEW_USER_SCORE
-                 *          DISPLAY updated leaderbaord
-                 *          RETURN to MAIN MENU or Continue Replay from last state
-                 *     }
-                 *
-                 * NOTE:
-                 *      - Might have to import relevant SQL Classes here depending on implementation
-                 *      - Still need to decide on segue/transition from alert dialog to leaderboards display
-                 *          >> Do we transition to activity_leaderboards view?
-                 *              >> IF SO, would be simply put the current view on the backstack?
-                 *              >> IF NOT, would we need to create a new fragment?
-                 *                  CONS:
-                 *                      - Seems redundant because we already have a leaderboards layout and db access for transactions in associated activity
-                 *                      - Would negatively impact code readability
-                 *                  PROS:
-                 *                      - Code reuse
-                 * USEFUL SOURCES:
-                 *      (1) For creating an Alert Dialog: https://stackoverflow.com/a/10904665
-                 *      (2) For wrapping up LeaderBoardsActivity.java: http://www.androiddom.com/2011/06/android-and-sqlite.html
-                 *      (3) *For using SQLOpenHelper: https://developer.android.com/training/data-storage/sqlite#java
-                 *
-                 */
+                ///////////////////////////////////////////////////////////
+                // Returning Current Top Ten High Scores as an ArrayList //
+                ///////////////////////////////////////////////////////////
+                List<User> highScoreUserList = dbHelper.getTopTenUsers();
+                User userPrevious;
+                User userNext;
+                boolean newEntry = false;
+                int tempHighScoreIndex = -1;
+                final int gameOverScore = getFinalScore();
+
+                ////////////////////////////////////////////////////////////
+                // If the high score user list is empty or contains less  //
+                // than 10 entries, add the new user at the correct spot  //
+                ////////////////////////////////////////////////////////////
+                if (highScoreUserList.size() < 10) {
+                    newEntry = true;
+                    tempHighScoreIndex = highScoreUserList.size();
+                }
+                /////////////////////////////////////////////////////////////
+                // Traverse the High Scores. If player scored high enough, //
+                // find out where they placed.                             //
+                /////////////////////////////////////////////////////////////
+                else if (highScoreUserList.size() == 10 && !newEntry) {
+                    for (int i = 1; i < highScoreUserList.size(); i++) {
+                        userPrevious = highScoreUserList.get(i - 1);
+                        userNext = highScoreUserList.get(i);
+                        if (gameOverScore > userPrevious.getScore()) {
+                            if (gameOverScore <= userNext.getScore()) {
+                                tempHighScoreIndex = i - 1;
+                                break;
+                            }
+                            else if (gameOverScore > userNext.getScore()) {
+                                tempHighScoreIndex = i;
+                            }
+                        }
+                    }
+                }
+                /////////////////////////////////////////////////////////////////////////
+                // If the user didn't get a high enough score to make the scoreboard,  //
+                // Show a simple alert message indicating game over                    //
+                /////////////////////////////////////////////////////////////////////////
+                if (tempHighScoreIndex == -1 && !newEntry) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setTitle("GAME OVER");
+                    alertDialog.setMessage(GAME_OVER_MSG);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+
+                }
+                ////////////////////////////////////////////
+                // Add the User Score to the Leader Board //
+                ////////////////////////////////////////////
+                else {
+                    final String alertMessageTitle;
+                    // Alert Dialog for inputText name and congrats on "tempHighScoreIndex" placement on scoreboard
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    if (getNumSuperScript(tempHighScoreIndex) == null) {
+                        alertMessageTitle = "CONGRATULATIONS";
+                    }
+                    else {
+                        alertMessageTitle = tempHighScoreIndex + getNumSuperScript(tempHighScoreIndex) + " Place!";
+                    }
+                    builder.setTitle(alertMessageTitle);
+                    builder.setMessage(SCOREBOARD_SUCCESS_MSG);
+
+                    // Set up the input
+                    final EditText input = new EditText(getActivity());
+
+                    // Specify the type of input expected
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+                    builder.setView(input);
+
+                    // Inner class accessor variables
+                    final int editIndex = tempHighScoreIndex;
+                    final boolean newGameEntry = newEntry;
+                    final List<User> userEditList = highScoreUserList;
+
+                    // Set up the buttons
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mAlertInputTypeText = input.getText().toString();
+                            User userToAdd = new User(mAlertInputTypeText, System.currentTimeMillis(), gameOverScore);
+                            if (!newGameEntry) {
+                                User editUser = userEditList.get(editIndex);
+                                userToAdd.setID(dbHelper.replaceUserScore(editUser, userToAdd));
+                            }
+                            else {
+                                dbHelper.addUserScore(userToAdd);
+                            }
+                        }
+                    });
+
+                    /////////////////////////////////////////////////////
+                    // IF we want to implement a cancel listener later //
+                    /////////////////////////////////////////////////////
+
+                    //builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(DialogInterface dialog, int which) {
+                    //        dialog.cancel();
+                    //    }
+                    //});
+
+                    builder.show();
+                }
             }
         }
     }
 
     public String setScore(){
-        int longestSequence = mBoard.getScore();
-
-        int finalScore = (longestSequence - replayCount) * mBoard.getDifficultyModifier();
+        int finalScore = getFinalScore();
         StringBuilder builder = new StringBuilder();
         Formatter formatter = new Formatter(builder, Locale.US);
         formatter.format("Final Score: %1$2d" +
                 "\nLongest Sequence: %2$2d" +
                 "\nNumber of Replays: %3$2d" +
-                "\nDifficulty: %4$s",finalScore, longestSequence, replayCount, mBoard.getDifficulty());
+                "\nDifficulty: %4$s",finalScore, mBoard.getScore(), replayCount, mBoard.getDifficulty());
         return formatter.toString();
+    }
+
+    public int getFinalScore() {
+        int longestSequence = mBoard.getScore();
+        return (longestSequence - replayCount) * mBoard.getDifficultyModifier();
+    }
+
+    /* Simple toast message function */
+    private void makeToast(CharSequence message) {
+        if(mToast != null) {
+            mToast.cancel();
+        }
+        Context context = getContext();
+        int duration = Toast.LENGTH_SHORT;
+        mToast = Toast.makeText(context, message, duration);
+        mToast.show();
+    }
+
+    // Returns the String superscript of an integer value with range 1 through 10
+    private String getNumSuperScript(int num) {
+        String superScript = null;
+        switch (num) {
+            case 1 :
+                superScript = "st";
+                break;
+            case 2 :
+                superScript = "nd";
+                break;
+            case 3 :
+                superScript = "rd";
+                break;
+            case 4 :
+            case 5 :
+            case 6 :
+            case 7 :
+            case 8 :
+            case 9 :
+            case 10 :
+                superScript = "th";
+                break;
+            default :
+                break;
+        }
+        return superScript;
     }
 }

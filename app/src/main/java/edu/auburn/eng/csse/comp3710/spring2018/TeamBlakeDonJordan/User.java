@@ -1,6 +1,8 @@
 package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by donaldtran on 4/29/18.
@@ -14,6 +16,7 @@ public class User {
     private long mDateAdded;
     private long mId;
     private int mScore;
+
 
     public User(String username, long dateAdded, int score) {
         mUsername = username;
@@ -30,6 +33,12 @@ public class User {
 
     public long getDateUserAdded() {
         return this.mDateAdded;
+    }
+
+    public String getFormattedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm", Locale.US);
+        Date resultdate = new Date(mDateAdded);
+        return sdf.format(resultdate);
     }
 
     public long getID() {

@@ -27,9 +27,11 @@ import java.util.List;
 
 public class ScoreboardDBHelper extends SQLiteOpenHelper {
 
-    // The SQLite where clause for user score update and delete
-    private static final String WHERE_CLAUSE = ScoreboardDBContract.ScoreboardEntry.COLUMN_USERNAMES +
-            " = ? AND " + ScoreboardDBContract.ScoreboardEntry.COLUMN_SCORES + "= ?";
+    // The SQLite where clause for user score update, replace, and delete
+    private static final String WHERE_CLAUSE =
+            ScoreboardDBContract.ScoreboardEntry.COLUMN_USERNAMES + " = ? AND " +
+            ScoreboardDBContract.ScoreboardEntry.COLUMN_SCORES + "= ? AND " +
+            ScoreboardDBContract.ScoreboardEntry.COLUMN_DATE_ADDED + " = ?";
 
     // Public constructor for instantiation and use in different classes
     public ScoreboardDBHelper(Context context) {
@@ -53,17 +55,14 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
 
     // Add a new user score
     public void addUserScore(User user) {
-
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_USERNAMES, user.getUserName());
         values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_SCORES, user.getScore());
-        values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_DATE_ADDED, System.currentTimeMillis());
+        values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_DATE_ADDED, user.getDateUserAdded());
         user.setID(db.insertOrThrow(ScoreboardDBContract.ScoreboardEntry.TABLE_NAME, null, values));
         Log.d("addUserScore", user.toString());
         db.close();
-
     }
 
     // Get Top 10 User Scores
@@ -74,12 +73,12 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + ScoreboardDBContract.ScoreboardEntry.TABLE_NAME +
                       " ORDER BY " + ScoreboardDBContract.ScoreboardEntry.COLUMN_SCORES + " ASC LIMIT 10";
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         User user;
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do{
-                user = new User(cursor.getString(0), cursor.getInt(1), cursor.getInt(2));
+                user = new User(cursor.getString(0), cursor.getLong(1), cursor.getInt(2));
                 userArrayList.add(user);
             } while (cursor.moveToNext());
             cursor.close();
@@ -91,21 +90,45 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
     // Update existing user score
     public long updateUserScore(User user){
         SQLiteDatabase db = this.getWritableDatabase();
-        String whereArgs[] = new String[]{String.valueOf(user.getUserName()), String.valueOf(user.getScore())};
+        String whereArgs[] = new String[] {String.valueOf(user.getUserName()),
+                String.valueOf(user.getScore()),
+                String.valueOf(user.getDateUserAdded())
+        };
         ContentValues values = new ContentValues();
         values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_USERNAMES, user.getUserName());
         values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_SCORES, user.getScore());
-        values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_DATE_ADDED, System.currentTimeMillis());
+        values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_DATE_ADDED, user.getDateUserAdded());
         user.setID(db.update(ScoreboardDBContract.ScoreboardEntry.TABLE_NAME, values, WHERE_CLAUSE, whereArgs));
         db.close();
         Log.d("updateUserScore", user.toString());
         return user.getID();
     }
 
+    // Replace all values of oldUser with that of newUser
+    public long replaceUserScore(User oldUser, User newUser) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereArgs[] = new String[] {String.valueOf(oldUser.getUserName()),
+                String.valueOf(oldUser.getScore()),
+                String.valueOf(oldUser.getDateUserAdded())
+        };
+        ContentValues values = new ContentValues();
+        values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_USERNAMES, newUser.getUserName());
+        values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_SCORES, newUser.getScore());
+        values.put(ScoreboardDBContract.ScoreboardEntry.COLUMN_DATE_ADDED, newUser.getDateUserAdded());
+        newUser.setID(db.update(ScoreboardDBContract.ScoreboardEntry.TABLE_NAME, values, WHERE_CLAUSE, whereArgs));
+        db.close();
+        Log.d("replaceUserScore", oldUser.toString() + " replaced with " + newUser.toString());
+        return newUser.getID();
+    }
+
+
     // Delete existing user score
     public void deleteUserScore(User user){
         SQLiteDatabase db = this.getWritableDatabase();
-        String whereArgs[] = new String[]{String.valueOf(user.getUserName()), String.valueOf(user.getScore())};
+        String whereArgs[] = new String[] {String.valueOf(user.getUserName()),
+                String.valueOf(user.getScore()),
+                String.valueOf(user.getDateUserAdded())
+        };
         user.setID(db.delete(ScoreboardDBContract.ScoreboardEntry.TABLE_NAME, WHERE_CLAUSE, whereArgs));
         db.close();
         Log.d("deleteUserScore", user.toString());
