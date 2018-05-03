@@ -24,7 +24,7 @@ public final class ScoreboardDBContract {
     public static final  String DATABASE_NAME      = "highscores.db";
     private static final String TEXT_TYPE          = " TEXT";
     private static final String INT_TYPE           = " INT";
-    private static final String COMMA_SEP          = ",";
+    private static final String COMMA_SEP          = ", ";
 
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
@@ -40,7 +40,7 @@ public final class ScoreboardDBContract {
         public static final String[] COLUMNS            = {TABLE_NAME, COLUMN_USERNAMES, COLUMN_SCORES, COLUMN_DATE_ADDED};
 
         public static final String CREATE_TABLE = "CREATE TABLE " +
-                TABLE_NAME + " (" + _ID + " INTEGER PRIMARY KEY," +
+                TABLE_NAME + " (" + _ID + " INTEGER PRIMARY KEY, " +
                 COLUMN_USERNAMES + TEXT_TYPE + COMMA_SEP +
                 COLUMN_SCORES + INT_TYPE + COMMA_SEP +
                 COLUMN_DATE_ADDED + INT_TYPE + " )";

@@ -249,6 +249,7 @@ public class AubieFragment extends Fragment {
                     final int editIndex = tempHighScoreIndex;
                     final boolean newGameEntry = newEntry;
                     final List<User> userEditList = highScoreUserList;
+                    final CharSequence toastMsg = "Updated! Check Leaderboard from Main Menu.";
 
                     // Set up the buttons
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -259,9 +260,11 @@ public class AubieFragment extends Fragment {
                             if (!newGameEntry) {
                                 User editUser = userEditList.get(editIndex);
                                 userToAdd.setID(dbHelper.replaceUserScore(editUser, userToAdd));
+                                makeToast(toastMsg);
                             }
                             else {
                                 dbHelper.addUserScore(userToAdd);
+                                makeToast(toastMsg);
                             }
                         }
                     });
