@@ -76,7 +76,7 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
         User user;
         if (cursor.moveToFirst()) {
             do{
-                user = new User(cursor.getString(0), cursor.getInt(1), cursor.getLong(2)); // 0th index is the Primary key
+                user = new User(cursor.getString(1), cursor.getInt(2), cursor.getLong(3)); // 0th index is the Primary key
                 userArrayList.add(user);
             } while (cursor.moveToNext());
             cursor.close();

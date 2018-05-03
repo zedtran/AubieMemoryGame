@@ -36,7 +36,7 @@ public class User {
     }
 
     public String getFormattedDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/DD/YY", Locale.US);
         Date resultdate = new Date(mDateAdded);
         return sdf.format(resultdate);
     }
