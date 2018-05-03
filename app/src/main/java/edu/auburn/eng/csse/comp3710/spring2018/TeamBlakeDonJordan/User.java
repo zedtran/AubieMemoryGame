@@ -67,5 +67,8 @@ public class User {
         this.mId = id;
     }
 
+    public String toString(){
+        return mUsername + " " + Integer.toString(mScore);
+    }
 
 }

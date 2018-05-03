@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /** Leaderboards
@@ -44,11 +45,13 @@ public class LeaderBoardsActivity extends Activity {
         Log.d(DEBUG_TAG, "onCreate()");
 
 
-
-
-        String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry",
-                "WebOS","Ubuntu","Windows7","Max OS X"};
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_item, mobileArray);
+        ArrayList<User> users = dbHelper.getTopTenUsers();
+        ArrayList<String> userList = new ArrayList<>();
+        for(User user : users){
+            userList.add(user.toString());
+        }
+        String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry", "WebOS","Ubuntu","Windows7","Max OS X"};
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_item, userList);
         ListView listView = findViewById(R.id.leaderboard);
         listView.setAdapter(adapter);
 

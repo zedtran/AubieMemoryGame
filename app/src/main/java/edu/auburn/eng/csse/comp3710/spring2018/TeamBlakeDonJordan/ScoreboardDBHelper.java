@@ -66,8 +66,8 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
     }
 
     // Get Top 10 User Scores
-    public List<User> getTopTenUsers(){
-        List<User> userArrayList = new ArrayList<>();
+    public ArrayList<User> getTopTenUsers(){
+        ArrayList<User> userArrayList = new ArrayList<>();
 
         // This query should be the equivalent of getting us the top 10 high scores
         String query = "SELECT * FROM " + ScoreboardDBContract.ScoreboardEntry.TABLE_NAME +
