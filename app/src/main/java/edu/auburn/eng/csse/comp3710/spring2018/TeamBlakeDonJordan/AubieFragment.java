@@ -88,9 +88,6 @@ public class AubieFragment extends Fragment {
         }
         else  mBoard.updateBoard(v);
 
-        mBoard.getLight(mBoard.getSequenceList().get(0)).addAnimation().start();  //flash initial animation
-
-
 
         /* soundId for Later handling of sound pool */
         final int redSound = sp.load(getContext(), R.raw.anote_red, 1); // in 2nd param u have to pass your desire ringtone
@@ -339,5 +336,15 @@ public class AubieFragment extends Fragment {
                 break;
         }
         return superScript;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 }

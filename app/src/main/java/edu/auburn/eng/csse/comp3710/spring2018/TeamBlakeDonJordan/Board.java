@@ -3,11 +3,9 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import java.util.ArrayList;
@@ -58,11 +56,11 @@ public class Board implements Parcelable {
      * sets difficulty string and its modifier
      */
     Board(boolean playOriginal, View v, String mDifficulty, Context context) {
-        Button mRedButton = (Button) v.findViewById(R.id.red);
-        Button mBlueButton = (Button) v.findViewById(R.id.blue);
-        Button mYellowButton = (Button) v.findViewById(R.id.yellow);
-        Button mGreenButton = (Button) v.findViewById(R.id.green);
-        Button mOrangeButton = (Button) v.findViewById(R.id.orange);
+        Button mRedButton = v.findViewById(R.id.red);
+        Button mBlueButton =  v.findViewById(R.id.blue);
+        Button mYellowButton =  v.findViewById(R.id.yellow);
+        Button mGreenButton =  v.findViewById(R.id.green);
+        Button mOrangeButton =  v.findViewById(R.id.orange);
         this.mDifficulty = mDifficulty;
         switch (mDifficulty.toLowerCase()){
             case("easy"):
@@ -81,14 +79,15 @@ public class Board implements Parcelable {
         }
 
         mRedLight = new Light(mRedButton, R.raw.anote_red, RED, context, mDifficultyModifier);
-        mBlueLight = new Light(mBlueButton, R.raw.enote_green, BLUE, context, mDifficultyModifier);
+        mBlueLight = new Light(mBlueButton, R.raw.enote_blue, BLUE, context, mDifficultyModifier);
         mYellowLight = new Light(mYellowButton, R.raw.csharpnote_yellow, YELLOW, context, mDifficultyModifier);
         mGreenLight = new Light(mGreenButton, R.raw.enote_green, GREEN, context, mDifficultyModifier);
         mOrangeLight = new Light(mOrangeButton, R.raw.fnote_orange, ORANGE, context, mDifficultyModifier);
         mLights = new Light[]{mRedLight, mBlueLight, mYellowLight, mGreenLight, mOrangeLight};
+        this.playOriginal = playOriginal;
         if (playOriginal) simonSequence();
         else aubieSequence();
-        this.playOriginal = playOriginal;
+
 
     }
     /* updateBoard(v)
@@ -208,7 +207,6 @@ public class Board implements Parcelable {
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() { //DELAYS THE ANIMATIONS FOR 1 SECOND
-                /* Create an Intent that will start the Menu-Activity. */
                 mAnimation.start();
             }
         }, 1000);

@@ -6,30 +6,28 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.media.SoundPool;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.Button;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 public class Light {
     private Button mButton;
-    private SoundPool mSoundPool = new SoundPool.Builder().build();
     private int mSound;
     private String mColor;
+    private SoundPool sp;
     private int mDifficultyModifier;
 
     Light(Button mButton, int mSound, String mColor, Context context, int mDifficultyModifier){
         this.mButton = mButton;
         this.mColor = mColor;
-        this.mSound = mSoundPool.load(context, mSound, 1);
+        this.sp = new SoundPool.Builder().build();
+        this.mSound = sp.load(context, mSound, 1);
         this.mDifficultyModifier = mDifficultyModifier;
     }
     public Button getButton() {
         return mButton;
     }
 
-    public int getSoundPool() {
+    public int getSound() {
         return mSound;
     }
 
@@ -43,6 +41,28 @@ public class Light {
         anim.setDuration(500 / mDifficultyModifier);                          //time it takes to run the animator, so 500 milliseconds / difficulty modifier
         anim.setRepeatMode(ValueAnimator.REVERSE);      //runs the animator and then reverses it and runs it again
         anim.setRepeatCount(1);                         //repeats only once
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                sp.play(mSound,1, 1, 0, 0, 1);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                sp.stop(mSound);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                //do nothing
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                //do nothing
+            }
+        });
+
         return anim;
     }
     public void updateBoard(View v)
@@ -68,3 +88,6 @@ public class Light {
         }
     }
 }
+
+
+

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.database.sqlite.SQLiteDatabase;
-import android.content.ContentValues;
 import java.sql.Date; // DATE_TYPE is specified in ScoreboardDBContract
 
 

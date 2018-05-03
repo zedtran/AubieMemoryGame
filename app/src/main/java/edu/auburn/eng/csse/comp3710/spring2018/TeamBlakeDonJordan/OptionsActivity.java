@@ -3,7 +3,6 @@ package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
@@ -40,7 +39,7 @@ public class OptionsActivity extends Activity {
 
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("modified", modNumber);
-        editor.commit();
+        editor.apply();
     }
 
     public static class SettingsFragment extends PreferenceFragment
