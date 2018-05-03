@@ -152,6 +152,17 @@ public class AubieFragment extends Fragment {
         return v;
     }
 
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
     /* click(color, mScoreBoard)
      * deals with player clicks. sets new sequence (will need to be removed eventually, sets game
      * over and sets score
@@ -171,26 +182,40 @@ public class AubieFragment extends Fragment {
                 ///////////////////////////////////////////////////////////
                 // Returning Current Top Ten High Scores as an ArrayList //
                 ///////////////////////////////////////////////////////////
-                List<User> highScoreUserList = dbHelper.getTopTenUsers();
+                final List<User> highScoreUserList = dbHelper.getTopTenUsers();
                 User userPrevious;
                 User userNext;
-                boolean newEntry = false;
+                //boolean newEntry = false;  //TODO
                 int tempHighScoreIndex = -1;
                 final int gameOverScore = getFinalScore();
 
-                ////////////////////////////////////////////////////////////
-                // If the high score user list is empty or contains less  //
-                // than 10 entries, add the new user at the correct spot  //
-                ////////////////////////////////////////////////////////////
-                if (highScoreUserList.size() < 10) {
-                    newEntry = true;
-                    tempHighScoreIndex = highScoreUserList.size();
+                /**
+                 * Traverse the High Scores. If player scored high enough,
+                 * find out where they placed.
+                 */
+                /////////////////////////////////////////////
+                // If the leader board is currently empty, //
+                // the player made first place             //
+                /////////////////////////////////////////////
+                if (highScoreUserList.size() == 0) {
+                    tempHighScoreIndex = 0;
                 }
-                /////////////////////////////////////////////////////////////
-                // Traverse the High Scores. If player scored high enough, //
-                // find out where they placed.                             //
-                /////////////////////////////////////////////////////////////
-                else if (highScoreUserList.size() == 10 && !newEntry) {
+                //////////////////////////////////////////////
+                // If the leader board has just one entry   //
+                // compare the game over score with that    //
+                // single leader board entry                //
+                //////////////////////////////////////////////
+                else if (highScoreUserList.size() == 1) {
+                    userNext = highScoreUserList.get(0);
+                    if (gameOverScore > userNext.getScore()) {
+                        tempHighScoreIndex = 0;
+                    }
+                    else {
+                        tempHighScoreIndex = 1;
+                    }
+                }
+                // If the leader board has at least two entries
+                else {
                     for (int i = 1; i < highScoreUserList.size(); i++) {
                         userPrevious = highScoreUserList.get(i - 1);
                         userNext = highScoreUserList.get(i);
@@ -205,83 +230,7 @@ public class AubieFragment extends Fragment {
                         }
                     }
                 }
-                /////////////////////////////////////////////////////////////////////////
-                // If the user didn't get a high enough score to make the scoreboard,  //
-                // Show a simple alert message indicating game over                    //
-                /////////////////////////////////////////////////////////////////////////
-                if (tempHighScoreIndex == -1 && !newEntry) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-                    alertDialog.setTitle("GAME OVER");
-                    alertDialog.setMessage(GAME_OVER_MSG);
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
-
-                }
-                ////////////////////////////////////////////
-                // Add the User Score to the Leader Board //
-                ////////////////////////////////////////////
-                else {
-                    final String alertMessageTitle;
-                    // Alert Dialog for inputText name and congrats on "tempHighScoreIndex" placement on scoreboard
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    if (getNumSuperScript(tempHighScoreIndex) == null) {
-                        alertMessageTitle = "CONGRATULATIONS";
-                    }
-                    else {
-                        alertMessageTitle = tempHighScoreIndex + getNumSuperScript(tempHighScoreIndex) + " Place!";
-                    }
-                    builder.setTitle(alertMessageTitle);
-                    builder.setMessage(SCOREBOARD_SUCCESS_MSG);
-
-                    // Set up the input
-                    final EditText input = new EditText(getActivity());
-
-                    // Specify the type of input expected
-                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-                    builder.setView(input);
-
-                    // Inner class accessor variables
-                    final int editIndex = tempHighScoreIndex;
-                    final boolean newGameEntry = newEntry;
-                    final List<User> userEditList = highScoreUserList;
-                    final CharSequence toastMsg = "Updated! Check Leaderboard from Main Menu.";
-
-                    // Set up the buttons
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mAlertInputTypeText = input.getText().toString();
-                            User userToAdd = new User(mAlertInputTypeText, System.currentTimeMillis(), gameOverScore);
-                            if (!newGameEntry) {
-                                User editUser = userEditList.get(editIndex);
-                                userToAdd.setID(dbHelper.replaceUserScore(editUser, userToAdd));
-                                makeToast(toastMsg);
-                            }
-                            else {
-                                dbHelper.addUserScore(userToAdd);
-                                makeToast(toastMsg);
-                            }
-                        }
-                    });
-
-                    /////////////////////////////////////////////////////
-                    // IF we want to implement a cancel listener later //
-                    /////////////////////////////////////////////////////
-
-                    //builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    //    @Override
-                    //    public void onClick(DialogInterface dialog, int which) {
-                    //        dialog.cancel();
-                    //    }
-                    //});
-
-                    builder.show();
-                }
+                showGameOverAlert(tempHighScoreIndex, highScoreUserList);
             }
         }
     }
@@ -314,7 +263,7 @@ public class AubieFragment extends Fragment {
     }
 
     // Returns the String superscript of an integer value with range 1 through 10
-    private String getNumSuperScript(int num) {
+    private String getNumSuffix(int num) {
         String superScript = null;
         switch (num) {
             case 1 :
@@ -341,13 +290,93 @@ public class AubieFragment extends Fragment {
         return superScript;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
+    private void showGameOverAlert(final int updateIndex, final List<User> highScoreUserList) {
+
+        // Final values, variables & Inner class usage vars
+        final int scorePosition = updateIndex + 1;
+        final String positionSuffix = getNumSuffix(scorePosition);
+        final String alertMessageTitle;
+        final CharSequence toastMsg;  // Sets up toast alert
+        final EditText input;         // Sets up the alert input
+        AlertDialog alertDialog;      // Initialize simple alert for Game Over alert
+        AlertDialog.Builder builder;  // Initialize alert builder for Game Over + New Leaderboard entry
+
+        /////////////////////////////////////////////////////////////////////////
+        // If the user didn't get a high enough score to make the scoreboard,  //
+        // Show a simple alert message indicating game over                    //
+        /////////////////////////////////////////////////////////////////////////
+        if (updateIndex == -1) {
+            toastMsg = "Check Leaderboard from Main Menu.";
+            alertMessageTitle = "GAME OVER";
+
+            // Make Alert
+            alertDialog = new AlertDialog.Builder(getActivity()).create(); // Game Over Alert
+            alertDialog.setTitle(alertMessageTitle);
+            alertDialog.setMessage(GAME_OVER_MSG);
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            makeToast(toastMsg);
+                        }
+                    });
+            alertDialog.show();
+        }
+        ////////////////////////////////////////////
+        // Add the User Score to the Leader Board //
+        ////////////////////////////////////////////
+        else {
+            toastMsg = "Updated! Check Leaderboard from Main Menu.";
+
+            if (positionSuffix == null) {
+                alertMessageTitle = "CONGRATULATIONS";
+                // NOTE: scoreSuffix should NOT be null. If null,
+            }
+            else {
+                alertMessageTitle = scorePosition + positionSuffix + " Place!";
+            }
+
+            // Alert Dialog for inputText name and congrats on placement on scoreboard
+            builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(alertMessageTitle);
+            builder.setMessage(SCOREBOARD_SUCCESS_MSG);
+
+            // Specify the type of input expected
+            input = new EditText(getActivity());
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mAlertInputTypeText = input.getText().toString();
+                    User newUser = new User(mAlertInputTypeText, System.currentTimeMillis(), getFinalScore());
+                    if (updateIndex >= 1) {
+                        User oldUser = highScoreUserList.get(updateIndex);
+                        newUser.setID(dbHelper.replaceUserScore(oldUser, newUser));
+                        makeToast(toastMsg);
+                    }
+                    else {
+                        dbHelper.addUserScore(newUser);
+                        makeToast(toastMsg);
+                    }
+                }
+            });
+
+            /////////////////////////////////////////////////////
+            // IF we want to implement a cancel option later   //
+            /////////////////////////////////////////////////////
+
+            //builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            //    @Override
+            //    public void onClick(DialogInterface dialog, int which) {
+            //        dialog.cancel();
+            //    }
+            //});
+
+            builder.show();
+        }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 }
