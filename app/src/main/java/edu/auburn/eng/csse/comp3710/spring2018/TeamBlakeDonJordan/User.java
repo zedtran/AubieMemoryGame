@@ -36,9 +36,9 @@ public class User {
     }
 
     public String getFormattedDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/DD/YY", Locale.US);
-        Date resultdate = new Date(mDateAdded);
-        return sdf.format(resultdate);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YY", Locale.US);
+        Date resultDate = new Date(mDateAdded);
+        return sdf.format(resultDate);
     }
 
     public long getID() {

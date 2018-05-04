@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.Collections;
 import java.util.ArrayList;
-
+import java.util.Locale;
 
 
 /** Leaderboards
@@ -40,14 +40,43 @@ public class LeaderBoardsActivity extends Activity {
         if(savedInstanceState != null) { }
         Log.d(DEBUG_TAG, "onCreate()");
 
-
         ArrayList<User> users = dbHelper.getTopTenUsers();
-        Collections.reverse(users); // Reverses the list to put highest score on top
+        //Collections.reverse(users); // Reverses the list to put highest score on top
         ArrayList<String> userList = new ArrayList<>();
         int i = 1;
-        for(User user : users){
-            userList.add("Rank: " + i + "|\t" + user.getUserName() + "\t" + user.getScore() + "\t" + user.getFormattedDate());
-            i++;
+
+        int nameLength;
+        String boardName;
+        int numSpacesToAddName = 0;
+
+        int scoreStrLength;
+        int numSpacesToSubScore = 11;
+
+        for(User user : users) {
+            boardName = user.getUserName();
+            if (i == 1) {
+                userList.add(String.format("%-8s %-9s %-10s %-17s", "RANK #", "NAME", "SCORE", "DATE"));
+            }
+            if (user.getUserName().length() < 10) {
+                nameLength = user.getUserName().length();
+                numSpacesToAddName = 10 - nameLength;
+            }
+            if (String.valueOf(user.getScore()).length() > 1) {
+                if (user.getScore() > 99999) {
+                    user.setScore(99999);
+                }
+                scoreStrLength = String.valueOf(user.getScore()).length();
+                numSpacesToSubScore = 13 - scoreStrLength;
+            }
+            userList.add(String.format(Locale.getDefault(),
+                    "%-8s" +
+                            "%-" + (7 + numSpacesToAddName) + "s" +
+                            "%-" + numSpacesToSubScore + "s" +
+                            "%-17s",
+                    String.valueOf(i++),
+                    boardName,
+                    String.valueOf(user.getScore()),
+                    user.getFormattedDate()));
         }
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.list_item, userList);

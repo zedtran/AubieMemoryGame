@@ -70,7 +70,8 @@ public class ScoreboardDBHelper extends SQLiteOpenHelper {
 
         // This query should be the equivalent of getting us the top 10 high scores
         String query = "SELECT * FROM " + ScoreboardDBContract.ScoreboardEntry.TABLE_NAME +
-                      " ORDER BY " + ScoreboardDBContract.ScoreboardEntry.COLUMN_SCORES + " ASC LIMIT 10";
+                      " ORDER BY " + ScoreboardDBContract.ScoreboardEntry.COLUMN_SCORES + " DESC, " +
+                        ScoreboardDBContract.ScoreboardEntry._ID + " ASC LIMIT 10";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
