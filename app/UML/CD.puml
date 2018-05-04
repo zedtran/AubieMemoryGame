@@ -1,0 +1,172 @@
+@startuml
+
+    class AubieFragment {
+        mBoard
+        mGameOver
+        mScoreBoard
+        replayCount
+        View v
+        SoundPool sp
+        mToast
+        dbHelper
+        mAlertInputTypeText
+        onCreate()
+        onSaveInstanceState()
+        onCreateView()
+        onStop()
+        onStart()
+        void click()
+        setScore()
+        getFinalScore()
+        makeToast()
+    }
+
+    class AubieMainActivity {
+        onCreate()
+    }
+
+    class AubieSplashActivity {
+        onCreate()
+    }
+
+    class Board {
+        mRedLight
+        mBlueLight
+        mYellowLight
+        mGreenLight
+        mOrageLight
+        mLights[]
+        mScore
+        mInputNumber
+        mSequence
+        mAnimatorArray
+        choices[]
+        mDifficultyModifier
+        mDifficulty
+        Board()
+        updateBoard()
+        getScore()
+        getLight()
+        aubieSequence()
+        simonSequence()
+        checkInput()
+        playAnimation()
+        reset()
+        resetInputCount()
+        isAnimatorRunning()
+        getRedLight()
+        getBlueLight()
+        getYellowLight()
+        getGreenLight()
+        getDifficulty()
+        getDifficultyModifier()
+        describeContents()
+        writeToParcel()
+        createFromParcel()
+        newArray()
+    }
+
+    class HolderActivity {
+        onCreate()
+        boolean PLAY_ORIGINAL
+    }
+
+    class LeaderBoardsActivity {
+        dbHelper
+        mDatabase
+        mContext
+        onCreate()
+        onSaveInstanceState()
+    }
+
+    class Light {
+        mButton
+        mSound
+        mColor
+        SoundPool sp
+        mDifficultyModifier
+        Light()
+        getButton()
+        getColor()
+        addAnimation()
+        onAnimationStart()
+        onAnimationEnd()
+        onAnimationCancel()
+        onAnimationRepeat()
+        updateBoard()
+    }
+
+    class MainMenuActivity {
+        onCreate()
+    }
+
+    class OptionsActivity {
+        onCreate()
+        onPause()
+        SettingsFragment()
+    }
+
+    class ScoreboardDBContract {
+        DATABASE_VERSION
+        DATABASE_NAME
+        TEXT_TYPE
+        INT_TYPE
+        COMMA
+        SPACE
+        ScoreboardDBContract()
+    }
+
+    class ScoreboardDBHelper {
+        WHERE_CLAUSE
+        ScoreboardDBHelper()
+        onCreate()
+        onUpgrade()
+        addUserScore()
+        getTopTenUsers()
+    }
+
+    class User {
+        mUsername
+        mDateAdded
+        mId
+        mScore
+        getUserName()
+        getDateUserAdded()
+        getFormattedDate()
+        getID()
+        getScore()
+        setScore()
+        setID()
+    }
+
+    Board "1" -- "5" Light : Contains >
+
+    MainMenuActivity "1" -- "1" OptionsActivity
+
+    MainMenuActivity "1" -- "1" LeaderBoardsActivity
+
+    AubieFragment "1" -- "1" Board
+
+    AubieFragment "1" -- "1" ScoreboardDBHelper
+
+    ScoreboardDBHelper "1" -- "1" ScoreboardDBContract
+
+    AubieMainActivity "1" -- "1" MainMenuActivity : Launches >
+
+    User "*" -- "1" MainMenuActivity : makes selection >
+
+    AubieSplashActivity "1" -- "1" AubieMainActivity : Calls >
+
+    MainMenuActivity "1" -- "1" HolderActivity : Calls >
+
+    User "*" -- "1" LeaderBoardsActivity : gets added to >
+
+    HolderActivity "1" -- "1" AubieFragment : instantiates >
+
+    OptionsActivity "1" -- "1" AubieFragment : influences >
+
+    ScoreboardDBHelper "1" -- "1" LeaderBoardsActivity
+    ScoreboardDBContract "1" -- "1" LeaderBoardsActivity
+
+
+@enduml
