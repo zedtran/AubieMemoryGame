@@ -8,7 +8,6 @@ import android.media.SoundPool;
 import android.view.View;
 import android.widget.Button;
 
-
 public class Light {
     private Button mButton;
     private int mSound;
@@ -16,7 +15,7 @@ public class Light {
     private SoundPool sp;
     private int mDifficultyModifier;
 
-    Light(Button mButton, int mSound, String mColor, Context context, int mDifficultyModifier){
+    Light(Button mButton, int mSound, String mColor, Context context, int mDifficultyModifier) {
         this.mButton = mButton;
         this.mColor = mColor;
         this.sp = new SoundPool.Builder().build();
@@ -27,14 +26,9 @@ public class Light {
         return mButton;
     }
 
-    public int getSound() {
-        return mSound;
-    }
-
     public String getColor() {
         return mColor;
     }
-
 
     public Animator addAnimation(){
         ObjectAnimator anim = ObjectAnimator.ofFloat(mButton, "alpha", 1, 0);   //sets so the opacity of the object goes from 100% to 0%

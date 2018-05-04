@@ -12,7 +12,7 @@ class PlayGame {
 }
 
 class Options {
-    difficulty
+    difficultyAubieFormat
 }
 
 class Board {

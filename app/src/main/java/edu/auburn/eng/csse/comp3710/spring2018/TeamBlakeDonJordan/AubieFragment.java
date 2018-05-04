@@ -1,7 +1,5 @@
 package edu.auburn.eng.csse.comp3710.spring2018.TeamBlakeDonJordan;
 
-
-
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.media.SoundPool;

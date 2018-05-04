@@ -1,35 +1,52 @@
 @startuml
 title Aubie's Memory Game SSD
+
 actor Player
 participant Aubie
-actor Memory
+participant Database
 
 group SD: Aubie's Memory Game
 
-    Player -> Aubie: start
+    Player -> Aubie: Start
+
     loop while !(gameOver)
         Player <-- Aubie:Board
         note right: UC: show Simon Board
-        Player <-- Aubie:Controller
-        Player <-- Aubie:Button
-        note right: Note: index is set to score plus one
+
+
         loop while(index > 0)
-            Player <-- Aubie:Random Button lights up
-            note right: UC: flash sequence
+            Player <-- Aubie:Create Sequence
+            note right: UC: create sequence to light up
+            Player <-- Aubie:Flash Sequence
+            note right: UC: buttons to be pressed light up
             Player <-- Aubie:index decremented
         end
+
+
         loop while (player hits correct button)
-            Player -> Aubie:hits button
+            Player -> Aubie:press lights
             note right: UC: press button
+
             alt player hits wrong button
-                Aubie --> Player: gameOver
+                Player <-- Aubie: gameOver
             end
         end
+
         alt !gameOver
-            Player <-- Aubie: score incremented
+            Player <-- Aubie: increment score
+            note right: UC: score incrementation based on difficulty
         end
+
     end
-    Player -> Memory: score
-    NOTE RIGHT: UC: publish score
+
+    Player -> Database: Publish Score
+    note right: UC: user chooses whether to save score or not
+    Player -> Database: View Leadboards
+    Player -> Aubie: Restart Game
+    Player -> Aubie: Replay Sequence
+    Player -> Aubie: Reset Board
+
+
+
 end
 @enduml

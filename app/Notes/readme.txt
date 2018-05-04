@@ -12,5 +12,7 @@ This readme file contains the following information:
 	  takes you to the main menu
 	- A simon sequence tone will sometimes play after game over
 
+5. There are some unused methods that are designed for "future features" and extendability.
+
 
 
