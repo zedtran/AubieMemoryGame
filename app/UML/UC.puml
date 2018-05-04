@@ -3,24 +3,68 @@ title Use Case Diagram
 
 actor Player
 actor Aubie
+
+rectangle {
+
+''' players uses
+usecase "start game" as UC1
+usecase "display leaderboards" as UC2
+usecase "play Simon" as UC3
+usecase "play Aubie" as UC4
+usecase "press lights" as UC5
+usecase "display options" as UC6
+usecase "choose option" as UC7
+usecase "publish score" as UC8
+usecase "reset" as UC9
+usecase "replay sequence" as UC10
+usecase "restart game" as UC11
+
+Player -- UC1
+Player -- UC2
+Player -- UC3
+Player -- UC4
+Player -- UC6
+Player -- UC7
+
+Player -- UC5
+Player -- UC8
+Player -- UC9
+Player -- UC10
+Player -- UC11
+
+
+''' aubie uses
+usecase "create sequence" as UC01
+usecase "verify input" as UC02
+usecase "flash sequence" as UC03
+usecase "display score" as UC04
+
+Aubie -- UC01
+Aubie -- UC02
+Aubie -- UC03
+Aubie -- UC04
+}
+
+
+'actor Player
+'actor Aubie
 'should aubie be an actor? and if not isnt it him verifying the input sequence?
 
+'rectangle  {
+'usecase "publish score" as UC3
+'usecase "start game" as UC2
+'usecase "view score" as UC1
+'usecase "flash sequence" as UC4
+'usecase "verify input" as UC5
+'Player -- UC2
+'Player -- UC1
+'Aubie -- UC4
+'Aubie -- UC5
 
-rectangle  {
-usecase "publish score" as UC3
-usecase "start game" as UC2
-usecase "view score" as UC1
-usecase "flash sequence" as UC4
-usecase "verify input" as UC5
-Player -- UC2
-Player -- UC1
-Aubie -- UC4
-Aubie -- UC5
-
-UC2 ..> (press button): <<includes>>
-UC2 ..> (show Simon board): <<includes>>
+'UC2 ..> (press button): <<includes>>
+'UC2 ..> (show Simon board): <<includes>>
 
 
-}
+
 @enduml
 
